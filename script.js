@@ -21,11 +21,15 @@ let pageTypes = {
   },
   "about": {
     "title": "About",
-    "content": "Insert some stuff here..."
+    "content": "RiverBox is a simple open-source social media app (...)"
   },
   "explore": {
     "title": "Explore",
-    "content": "Insert some stuff here..."
+    "content": "<h1>Explore</h1>The post is not currently available!"
+  },
+  "messages": {
+    "title": "Messages",
+    "content": ""
   }
 }
 
