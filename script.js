@@ -17,19 +17,28 @@ let pageTypes = {
     <br>
     <button onclick="dummyLoad()">
       Try dummy posts?
-    </button>`
+    </button>`,
+    "accountonly": false
   },
   "about": {
     "title": "About",
-    "content": "RiverBox is a simple open-source social media app (...)"
+    "content": "RiverBox is a simple open-source social media app (...)",
+    "accountonly": false
   },
   "explore": {
     "title": "Explore",
-    "content": "<h1>Explore</h1>The post is not currently available!"
+    "content": "<h1>Explore</h1>The post is not currently available!",
+    "accountonly": false
+  },
+  "settings": {
+    "title": "Settings",
+    "content": "The account is not currently available!",
+    "accountonly": true
   },
   "messages": {
     "title": "Messages",
-    "content": ""
+    "content": "The account is not currently available!",
+    "accountonly": true
   }
 }
 
@@ -41,6 +50,7 @@ RiverBox
 <span onclick="dispatchPageLoad('explore')">Explore</span>
 <span onclick="dispatchPageLoad('about')">About</span>
 <div id="accountControls">
+<span onclick="dispatchPageLoad('settings')">Settings</span>
 <span onclick="dispatchPageLoad('messages')">Messages</span>
 <span onclick="dispatchPageLoad('${username}')">${username}</span>
 </div>
@@ -58,7 +68,7 @@ function dispatchLoadingScreen() {
 function dispatchPageLoad(pageType) {
   dispatchLoadingScreen();
   lastPageVisited = pageType;
-  if (pageTypes[pageType] != null) {
+  if (pageTypes[pageType] != null && pageTypes[pageType].accountonly == false) {
     document.title = pageTypes[pageType].title + " - RiverBox";
     document.getElementById("pageContent").innerHTML = pageTypes[pageType].content;
     clearTimeout(loadTimeout)
