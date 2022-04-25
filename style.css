@@ -20,9 +20,18 @@ body {
     font-size: 20px;
 }
 
-#navbar > img {
+.homeNavButtons {
+  display: inline-block;
+}
+
+.homeNavButtons > img {
   width: 30px;
   vertical-align: middle;
+}
+
+.homeNavButtons:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 #navbar > span, #accountControls > span {

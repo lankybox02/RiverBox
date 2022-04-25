@@ -30,7 +30,10 @@ let pageTypes = {
 }
 
 document.getElementById("navbar").innerHTML = `
-<div style="display:inline-block" onclick="dispatchPageLoad('home')><img src="assets/logo.png"> RiverBox</div>
+<div class="homeNavButtons" onclick="dispatchPageLoad('home')">
+<img src="assets/logo.png">
+RiverBox
+</div>
 <span onclick="dispatchPageLoad('explore')">Explore</span>
 <span onclick="dispatchPageLoad('about')">About</span>
 <div id="accountControls">
