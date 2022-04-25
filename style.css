@@ -1,0 +1,94 @@
+body {
+  font-family: helvetica;
+  background-color: #2e2e2e;
+  color: white;
+  margin: 0;
+  margin-top: 50px;
+}
+
+#navbar {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: #1f1f1f;
+    box-shadow: 0 0 3px rgb(255 255 255 / 25%);
+    width: 100%;
+    height: 30px;
+    padding: 10px;
+    font-size: 20px;
+}
+
+#navbar > img {
+  width: 30px;
+  vertical-align: middle;
+}
+
+#navbar > span, #accountControls > span {
+  margin-left: 20px;
+}
+
+#navbar > span:hover, #accountControls > span:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#accountControls {
+  display: inline-block;
+  float: right;
+  padding-right: 20px;
+}
+
+.banner {
+  background-color: #fff;
+  color: black;
+  padding: 5px;
+}
+
+.banner > span {
+  cursor: pointer;
+  float: right;
+}
+
+#pageContent {
+  text-align: center;
+  padding: 130px;
+  padding-top: 60px;
+}
+
+#pageContent > .header {
+  font-size: 30px;
+}
+
+button {
+  background-color: #f5f5f5;
+  border: 0;
+  border-radius: 8px;
+  color: #333333;
+  cursor: pointer;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.loader {
+  display: inline-block;
+  border: 8px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 8px solid #62d7ff;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
