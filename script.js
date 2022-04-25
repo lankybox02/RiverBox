@@ -27,17 +27,17 @@ let pageTypes = {
   },
   "explore": {
     "title": "Explore",
-    "content": "<h1>Explore</h1>The post is not currently available!",
+    "content": "<h1>Explore</h1>The post API is not currently available!",
     "accountonly": false
   },
   "settings": {
     "title": "Settings",
-    "content": "The account is not currently available!",
+    "content": "The account API is not currently available!",
     "accountonly": true
   },
   "messages": {
     "title": "Messages",
-    "content": "The account is not currently available!",
+    "content": "The account API is not currently available!",
     "accountonly": true
   }
 }
