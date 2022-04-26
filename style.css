@@ -66,7 +66,7 @@ body {
   padding-top: 60px;
 }
 
-#pageContent > .header {
+.header {
   font-size: 30px;
 }
 
@@ -101,4 +101,27 @@ button {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.explore-tile {
+  background-color:white;
+  border:5px solid lightgrey;
+  padding:10px;
+  padding-left:20px;
+  border-radius: 20px;
+  display: inline-block;
+  width: 200px;
+  margin: 20px;
+  color: black;
+}
+
+input {
+  background-color: #f5f5f5;
+  border: 0;
+  border-radius: 100px;
+  color: #333333;
+  padding: 10px 12px;
+  margin-top: 5px;
+  outline: none;
+}
 }
