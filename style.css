@@ -78,6 +78,7 @@ button {
   cursor: pointer;
   padding: 10px 12px;
   text-align: center;
+  margin-top:5px;
 }
 
 .loader {
