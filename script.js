@@ -75,7 +75,7 @@ function dispatchPageLoad(pageType) {
   }
   loadTimeout = setTimeout(function(){
     if (document.getElementById("pageContent").innerHTML.includes("Give us a moment...</span>")) {
-      document.getElementById("pageContent").innerHTML = `<span class="header">Well, this is embarrassing...</span><br><span>It appears that the page you tried to visit isn't loading correctly.<br>Click the re-try button, and if it doesn't work, please reload the page.</span><br><button onclick="dispatchPageLoad('` + lastPageVisited + `')">Re-try</button>`;
+      document.getElementById("pageContent").innerHTML = `<span class="header">Well, this is embarrassing...</span><br><span>It appears that the page you tried to visit isn't loading correctly.<br>Click the re-try button, and if it doesn't work, please reload the page.</span><br><button onclick="dispatchPageLoad('${pageType}')">Re-try</button>`;
     }
   }, 2000);
 }
