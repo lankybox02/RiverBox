@@ -1,13 +1,20 @@
 let lastPageVisited;
 let loadTimeout;
 let loggedOut;
+let logged;
+let admin;
 
-if (localStorage.getItem("username") != null && localStorage.getItem("session") != null) {
+if (ipExpActivated && localStorage.getItem("ip") == null) {
+  modal("ipconfirm");
+  localStorage.setItem("ip", true);
+}
+
+logged = localStorage.getItem("username") != null && localStorage.getItem("session") != null;
+if (logged) {
 dispatchLoadingScreen();
 fetch("https://riverbox-api.lankybox02.repl.co/signin/" + localStorage.getItem("username") + "/" + localStorage.getItem("session"))
    .then(response => response.json())
    .then(data => computeLoginData(data))
-   .catch(err => dispatchLoadingScreen())
 }else{
 insertNav("$");
 dispatchPageLoad("home");
@@ -15,11 +22,13 @@ dispatchPageLoad("home");
 
 function computeLoginData(data) {
     if (data.success == "true") {
+    admin = data.admin;
     insertNav(data.username);
     }else{
     insertNav("$")
     alert("Error: " + data.error)
     localStorage.removeItem("session");
+    logged = false;
     }
     dispatchPageLoad("home")
 }
@@ -29,7 +38,6 @@ let accountControls;
 accountControls = `
 <div id="accountControls">
 <span onclick="dispatchPageLoad('settings')">Settings</span>
-<span onclick="dispatchPageLoad('messages')">Messages</span>
 <span onclick="dispatchPageLoad('${username}')">${username}</span>
 </div>
 `;
@@ -46,13 +54,13 @@ document.getElementById("navbar").innerHTML = `
 <img src="assets/logo.png">
 RiverBox
 </div>
-<span onclick="dispatchPageLoad('explore')">Explore</span>
-<span onclick="dispatchPageLoad('about')">About</span>
+<span onclick="modal('oops')">Explore</span>
+<span onclick="modal('oops')">About</span>
 ${accountControls}
 `;
 }
 
-function dispatchLoadingScreen(alwayswait) {
+function dispatchLoadingScreen() {
   document.getElementById("pageContent").innerHTML = `<div class="loader"></div><br><span class="header">Give us a moment...</span>`;
 }
 
@@ -60,21 +68,31 @@ function dispatchPageLoad(pageType) {
   dispatchLoadingScreen();
   lastPageVisited = pageType;
   if (pageTypes[pageType] != null) {
-    if (pageTypes[pageType].accountonly == true) {
-      document.title = "Whoops! - RiverBox";
-    document.getElementById("pageContent").innerHTML = `Account-only pages aren't currently supported!`;
-    clearTimeout(loadTimeout)
+    if (pageTypes[pageType].accountonly == true && loggedOut == true) {
+    dispatchLoadingScreen();
+    clearTimeout(loadTimeout);
   }else{
     document.title = pageTypes[pageType].title + " - RiverBox";
     document.getElementById("pageContent").innerHTML = pageTypes[pageType].content;
+    eval(pageTypes[pageType].script);
     clearTimeout(loadTimeout)
+
+    if (pageType == "home") {
+      document.body.insertAdjacentHTML("beforeEnd", `<div class="post-button" onclick="post()">+</div>`)
+    }
   }
     }
   loadTimeout = setTimeout(function(){
     if (document.getElementById("pageContent").innerHTML.includes("Give us a moment...</span>")) {
+      if (lastPageVisited == "home") {
+        setTimeout(function(){
+          dispatchPageLoad("apifail");
+        }, 100)
+      }else{
       document.getElementById("pageContent").innerHTML = `<span class="header">Well, this is embarrassing...</span><br><span>It appears that the page you tried to visit isn't loading correctly.<br>Click the re-try button, and if it doesn't work, please reload the page.</span><br><button onclick="dispatchPageLoad('${pageType}')">Re-try</button>`;
+      }
     }
-  }, 4000);
+  }, 2000);
 }
 
 function initLoadPosts(){
@@ -85,16 +103,34 @@ fetch("https://riverbox-api.lankybox02.repl.co/latestposts")
 }
 
 function loadPosts(x) {
-  document.getElementById("pageContent").innerHTML = ``;
+  document.getElementById("pageContent").innerHTML = `<h1>Recent posts</h1>`;
 
 var postKeys = Object.keys(x);
 
 for(let i = postKeys.length; i > 0; i--) {
 data = postKeys[i - 1];
-document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div style="background-color: white;border-radius: 20px;padding: 15px;width: 60%;display: inline-block;text-align: left;"><span style="color:black">` + x[data].content + `</span>
-<br>
-<div style="float: right;color: grey;">By <b style="color: black;">` + x[data].author + `</b> on <span style="color: black;">` + x[data].timestamp + `</span></div></div><br><br>`);
+document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div class="post">` + x[data].author + `<span style="margin-top:7px;margin-bottom:7px;display:block">` + convertPost(x[data].content) + `</span>
+<span onclick="likePost(this)" class="likeButton" ` + loggedLike() + `>Like (${x[data].likes})</span> <span class="hiddenModButton" onclick="modPost(this)" ` + adminClassLoad() + `>(Moderate)</span>
+<div style="float: right;color: lightgrey;">` + humanized_time_span(x[data].timestamp) + `</div></div><br><br>`);
 }
+}
+
+function loggedLike() {
+  if (!logged) {
+    return "style='display:none'";
+  }
+}
+
+function adminClassLoad(){
+  if(admin == 'true') {
+    return "style='display: inline-block !important'";
+  }else{
+    return "";
+  }
+}
+
+function convertPost(postContent) {
+  return atob(postContent.split("<")[0]).replaceAll("[b]", `<b>`).replaceAll("[/b]", `</b>`).replaceAll("[i]", `<i>`).replaceAll("[/i]", `</i>`).replaceAll("[u]", `<u>`).replaceAll("[/u]", `</u>`).replaceAll("[s]", `<s>`).replaceAll("[/s]", `</s>`);
 }
 
 // Example POST method implementation:
@@ -124,7 +160,14 @@ const signUp = () => {
   }else{
 postData('https://riverbox-api.lankybox02.repl.co/signup', JSON.parse(`{"username": "${usernameInput}"}`))
   .then(data => {
-    logIn(data);
+    setTimeout(function(){
+      if (data.success == 'false') {
+        document.getElementById("signup-error").innerText = data.error;
+      }else{
+        logIn(data);
+        modal("welcome");
+      }
+    }, 1000)
   });
   }
 }
@@ -139,8 +182,54 @@ function logIn(data) {
 }
 
 function logOut() {
-  if (confirm("Are you sure you want to log out? You will not be able to log back in!")) {
-    localStorage.removeItem("session");
-    window.location.reload();
+  localStorage.removeItem("session");
+  window.location.reload();
+}
+
+function post() {
+  if (logged) {
+    modal("postprompt");
+  }else{
+    dispatchPageLoad("signup");
   }
+}
+
+function sendPost(postContent) {
+  if (postContent != null) {
+    postData('https://riverbox-api.lankybox02.repl.co/post', JSON.parse(`{"post": "${postContent}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `"}`))
+      .then(data => {
+        window.location.reload();
+      });
+  }
+}
+
+function modal(modalType) {
+  document.getElementById("modal-header").innerText = modalTypes[modalType].title;
+  document.getElementById("modal-content").innerHTML = modalTypes[modalType].content;
+  document.getElementById("myModal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("myModal").style.display = "none";
+}
+
+function modPost(e) {
+let postId = e.parentElement.children[0].children[0].innerText;
+postData('https://riverbox-api.lankybox02.repl.co/remove', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "post": "` + postId + `"}`))
+  .then(data => {
+    window.location.reload();
+  });
+}
+
+function likePost(e) {
+let postId = e.parentElement.children[0].children[0].innerText;
+postData('https://riverbox-api.lankybox02.repl.co/like', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "post": "${postId}"}`))
+  .then(data => {
+    if (data.success) {
+      let newCount = parseInt(e.innerText.replace(/\D/g, "")) + 1;
+      e.innerText = "Liked (" + newCount.toString() + ")";
+      e.style.fontDecoration = null;
+      e.style.cursor = null;
+    }
+  });
 }

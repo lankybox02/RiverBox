@@ -6,15 +6,47 @@
   <title>Home - RiverBox</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
   <link rel="icon" type="image/x-icon" href="assets/logo.png">
+  <script>
+    let ip;
+    let ipExpActivated = false; // true if we're asking for IPs
+
+    function setIPperms(value) {
+        if(value == true) {
+          fetch("https://api.ipify.org/")
+            .then(response => response.text())
+            .then(data => ip = data)
+        }
+        closeModal();
+    }
+  </script>
 </head>
 <body>
   <div id="navbar">
   </div>
-  <div class="banner">RiverBox is a fairly new project, so there might be bugs or issues in some parts of the site. If you find any, please report them on our github page.
+  <!-- Beta banner (currently hidden) -->
+  <div class="banner" style="display:none">You are on the beta version of RiverBox!
   <span onclick="document.querySelector('.banner').remove()">&times;</div>
+  <!-- Page content -->
   <div id="pageContent">
   </div>
+  <!-- Blank modal to be triggered -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <div id="modal-header">modal.header</div>
+      <p id="modal-content">modal.content</p>
+    </div>
+  </div>
+  <!-- Insert all page scripts -->
+  <script src="humanized-time-span.js"></script>
   <script src="pagetypes.js"></script>
   <script src="script.js"></script>
+
+  <!-- Beta script -->
+  <script>
+    if (localStorage.getItem("betaTester") == null) {
+      modal("betaprompt"); // Beta is now open for test 🚀✨🎊🎉
+      localStorage.setItem("betaTester", true);
+    }
+  </script>
 </body>
 </html>
