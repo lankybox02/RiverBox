@@ -1,8 +1,21 @@
 let lastPageVisited;
 let loadTimeout;
 let loggedOut;
+let version;
 let logged;
 let admin;
+
+version = "Public Beta 1.1";
+
+fetch("https://riverbox-api.lankybox02.repl.co/")
+   .then(response => response.json())
+   .then(data => maintenanceCheck(data.maintenance))
+
+function maintenanceCheck(maintenance) {
+  if (maintenance && !location.hostname.endsWith('test.ml')) {
+    document.body.innerHTML = `<h1 style="padding-left:20px">503 Maintenance</h1>`;
+  }
+}
 
 if (ipExpActivated && localStorage.getItem("ip") == null) {
   modal("ipconfirm");
