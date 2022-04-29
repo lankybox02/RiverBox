@@ -187,8 +187,7 @@ let modalTypes = {
     <span style="margin-top: 15px;display: block;">
     The user pages are still in the making, so unfortunately you cannot see a user's account for now.
     </span>
-    <button class="highlightedButton" onclick="dispatchPageLoad('about');closeModal()">Yup!</button>
-    <button onclick="closeModal()">Oh, nevermind then</button>
+    <button onclick="closeModal()" class="highlightedButton">Oh, alright</button>
     </div>
 </div>`
   },
