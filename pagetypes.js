@@ -7,14 +7,14 @@ let pageTypes = {
   },
   "about": {
     "title": "About",
-    "content": "RiverBox is a simple open-source social media app (...)",
+    "content": "<h1>About</h1>RiverBox is a simple open-source social media app (...)",
     "script": ``,
     "accountonly": false
   },
   "explore": {
     "title": "Explore",
-    "content": `<h1>Explore</h1><div style="text-align:left" id="tiles"><span class="header">Featured Users</span><br><span>Failed to reach API</span></div>`,
-    "script": ``,
+    "content": `<h1>Explore</h1><div style="text-align:left" id="tiles"><span class="header">Featured Users</span><br></div>`,
+    "script": `exploreLoad()`,
     "accountonly": false
   },
   "settings": {
@@ -136,6 +136,59 @@ let modalTypes = {
     Oops, this page is not available in the beta version of RiverBox.
     </span>
     <button class="highlightedButton" onclick="closeModal()">Dismiss</button>
+    </div>
+</div>`
+  },
+  "testmodal": {
+    "title": "testmodal.title",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;">
+    <span class="header">testmodal.header</span>
+    <span style="margin-top: 15px;display: block;">
+    testmodal.content
+    </span>
+    <button class="highlightedButton" onclick="closeModal()">testmodal.hightlightedbutton</button>
+    <button onclick="closeModal()">testmodal.button</button>
+    <button onclick="closeModal()">testmodal.button</button>
+    </div>
+</div>`
+  },
+  "exploreholup": {
+    "title": "Beta alert!",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;">
+    <span class="header">Hol' up!</span>
+    <span style="margin-top: 15px;display: block;">
+    This page is still in beta. You might find a lot of bugs and design issues when visiting it. Would you like to continue?
+    </span>
+    <button class="highlightedButton" onclick="dispatchPageLoad('explore');closeModal()">Take me to it!</button>
+    <button onclick="closeModal()">Nevermind</button>
+    </div>
+</div>`
+  },
+  "aboutwait": {
+    "title": "Beta alert!",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;">
+    <span class="header">Wait a minute!</span>
+    <span style="margin-top: 15px;display: block;">
+    This page is still in beta, so there's literally nothing to see on it. Do you still want to see it anyway?
+    </span>
+    <button class="highlightedButton" onclick="dispatchPageLoad('about');closeModal()">Yup!</button>
+    <button onclick="closeModal()">Oh, nevermind then</button>
+    </div>
+</div>`
+  },
+  "betauseralert": {
+    "title": "Beta alert!",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;">
+    <span class="header">Oof...</span>
+    <span style="margin-top: 15px;display: block;">
+    The user pages are still in the making, so unfortunately you cannot see a user's account for now.
+    </span>
+    <button class="highlightedButton" onclick="dispatchPageLoad('about');closeModal()">Yup!</button>
+    <button onclick="closeModal()">Oh, nevermind then</button>
     </div>
 </div>`
   },
