@@ -1,7 +1,7 @@
 function insertNav(username) {
 let adminPageLink;
 if (admin == 'true') {
-  adminPageLink = `<span onclick="window.location.href = '/tickets.html'">Tickets</span>`;
+  adminPageLink = `<span onclick="window.location.href = 'https://lankybox02.github.io/RiverBox/tickets.html'">Tickets</span>`;
 }else{
   adminPageLink = "";
 }
@@ -50,7 +50,7 @@ accountControls = `
 `;
 
 document.getElementById("navbar").innerHTML = `
-<div class="homeNavButtons" onclick="document.location.href = '/'">
+<div class="homeNavButtons" onclick="document.location.href = 'https://lankybox02.github.io/RiverBox/'">
 <img src="assets/logo.png" id="adminLogo">
 RiverBox
 </div>
