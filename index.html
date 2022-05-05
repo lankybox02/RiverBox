@@ -21,9 +21,10 @@
   </script>
 </head>
 <body>
+  <!-- Navigation bar -->
   <div id="navbar">
   </div>
-  <!-- Beta banner (currently hidden) -->
+  <!-- Page banner - to be customized individually -->
   <div class="banner" style="display:none">You are on the beta version of RiverBox!
   <span onclick="document.querySelector('.banner').remove()">&times;</div>
   <!-- Page content -->
@@ -39,18 +40,16 @@
     </div>
   </div>
   <!-- Insert all page scripts -->
-  <script src="humanized-time-span.js"></script>
-  <script src="communityArray.js"></script>
-  <script src="pagetypes.js"></script>
-  <script src="console.js"></script>
-  <script src="script.js"></script>
-
-  <!-- Beta script -->
-  <script>
-    if (localStorage.getItem("betaTester") == null) {
-      modal("betaprompt"); // Beta is now open for test 🚀✨🎊🎉
-      localStorage.setItem("betaTester", true);
-    }
-  </script>
+  <script src="scripts/community-functions.js"></script>
+  <script src="scripts/profile-functions.js"></script>
+  <script src="scripts/tickets-load.js"></script>
+  <script src="scripts/admin-tools.js"></script>
+  <script src="scripts/pagetypes.js"></script>
+  <script src="scripts/console.js"></script>
+  <script src="scripts/navbar.js"></script>
+  <script src="scripts/moment.js"></script>
+  <script src="scripts/themes.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="featured.js"></script>
 </body>
 </html>

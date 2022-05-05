@@ -1,9 +1,23 @@
+:root {
+  --background: #111a27;
+  --primary: rgba(34, 35, 48, 0.6);
+  --secondary: rgba(31, 41, 55, 1);
+  --border: rgb(37 47 61);
+  --font: white;
+  --secondaryfont: lightgrey;
+  --postfont: white;
+}
+
 body {
   font-family: helvetica;
-  background-color: #111a27;
-  color: white;
+  background-color: var(--background);
+  color: var(--font);
   margin: 0;
   margin-top: 50px;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 #navbar {
@@ -12,12 +26,12 @@ body {
     top: 0;
     left: 0;
     z-index: 1;
-    background-color: #222330;
+    background-color: var(--primary);
     box-shadow: 0 0 3px rgb(255 255 255 / 25%);
     width: 100%;
     height: 30px;
     padding: 10px;
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .homeNavButtons {
@@ -25,7 +39,7 @@ body {
 }
 
 .homeNavButtons > img {
-  width: 30px;
+  width: 35px;
   vertical-align: middle;
 }
 
@@ -49,6 +63,28 @@ body {
   padding-right: 20px;
 }
 
+.dropdown {
+  background-color: var(--primary);
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.dropdown > span {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.dropdown > span:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .banner {
   background-color: #fff;
   color: black;
@@ -62,8 +98,6 @@ body {
 
 #pageContent {
   text-align: center;
-  padding: 30px;
-  padding-top: 60px;
 }
 
 .header {
@@ -82,18 +116,24 @@ textarea {
 
 button {
   background-color: #f5f5f5;
-  border: 0;
   border-radius: 20px;
   color: #333333;
   cursor: pointer;
   padding: 10px 12px;
   text-align: center;
   margin-top:5px;
+  border: 2px solid grey;
 }
 
 .highlightedButton {
-    background-color: #2dc9ff;
-    color: white;
+  background-color: #2dc9ff;
+  border: 2px solid #1786ab !important;
+  color: white;
+}
+
+.disabledButton {
+  cursor: not-allowed;
+  color:grey
 }
 
 .loader {
@@ -128,9 +168,10 @@ button {
   width: 200px;
   margin: 20px;
   color: black;
+  cursor: pointer;
 }
 
-input {
+input, select {
   background-color: #f5f5f5;
   border: 0;
   border-radius: 100px;
@@ -138,6 +179,7 @@ input {
   padding: 10px 12px;
   margin-top: 5px;
   outline: none;
+  border: 2px solid grey;
 }
 
 .post-button {
@@ -160,7 +202,7 @@ input {
 .modal {
   display: none;
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   padding-top: 100px;
   left: 0;
   top: 0;
@@ -171,7 +213,7 @@ input {
 }
 
 .modal-content {
-  background-color: #222330;
+  background-color: var(--background);
   margin: auto;
   padding: 50px 30px 0px 30px;
   border: 1px solid #888;
@@ -192,7 +234,7 @@ input {
   border-radius: 20px 20px 0 0;
 }
 
-.hiddenModButton, .likeButton {
+.socialButton {
   text-decoration: underline;
   color: grey;
   font-style: italic;
@@ -200,19 +242,15 @@ input {
   cursor: pointer;
 }
 
-.hiddenModButton {
-  display: none;
-}
-
 .post {
-  background-color: rgba(31, 41, 55, 1);
+  background-color: var(--secondary);
   color: white;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 15px;
-  width: 60%;
+  width: calc(30vh + 20%);
   display: inline-block;
   text-align: left;
-  border: 3px solid rgb(37 47 61);
+  border: 3px solid var(--border);
 }
 
 a {
@@ -221,6 +259,38 @@ a {
 
 #version {
   position: fixed;
-  bottom: 7px;
-  left: 7px;
+  bottom: 30px;
+  left: 30px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  color: black;
+  border-radius: 200px;
+  font-size: 20px;
+}
+
+.moderated-post-text {
+  color: #ff7070;
+  font-style: italic;
+}
+
+#tiles {
+  margin-left: 5vh;
+}
+
+.ticket {
+  background-color: #e8e8e8;
+  border: 4px solid lightgrey;
+  color: black;
+  width: 50%;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.ticket > a {
+  color: black;
+}
+
+summary {
+  cursor: pointer;
 }
