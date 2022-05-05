@@ -22,6 +22,6 @@ function loadAdminTickets() {
   
   for (let i = Object.keys(rawTickets).length; i > 0; i--) {
     document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div id="${i}" class="ticket"></div><br><br>`);
-    document.getElementById(i).innerHTML = rawTickets[i].reason.replaceAll("<", "&lt;").replaceAll(">", "&rt;") + "<br>For ID" + rawTickets[i].postId + " by " + rawTickets[i].by + `<br><a href="/?post=` + rawTickets[i].postId + `">View Post</a> - <a href="/?user=` + rawTickets[i].by + `">View User</a>`;
+    document.getElementById(i).innerHTML = rawTickets[i].reason.replaceAll("<", "&lt;").replaceAll(">", "&gt;") + "<br>For ID" + rawTickets[i].postId + " by " + rawTickets[i].by + `<br><a href="/https://lankybox02.github.io/?post=` + rawTickets[i].postId + `">View Post</a> - <a href="https://lankybox02.github.io/?user=` + rawTickets[i].by + `">View User</a>`;
   }
 }
