@@ -123,7 +123,7 @@ function dispatchPageLoad(pageType, doNotSetTitle) {
         }, 100)
       }else{
       dispatchDocumentTitle("Whoops!");
-      document.getElementById("pageContent").innerHTML = `<br><br><span class="header">Are you sure you're in the right place?</span><br><span>The page you have tried to load didn't return any response - it's either broken or does not exist.<br>If you're most certain this page should be loading correctly, please click the button below.<br>If it still doesn't load, please create an issue on our <a href="https://github.com/lankybox02/RiverBox/issues/16">github page</a>.</span><br><button onclick="dispatchPageLoad('${pageType}')">Re-try</button>`;
+      document.getElementById("pageContent").innerHTML = `<br><br><span class="header">Are you sure you're in the right place?</span><br><span>The page you have tried to load didn't return any response - it's either broken or does not exist.<br>If you're most certain this page should be loading correctly, please click the button below. You cold also go back home by clicking the other button.<br>If it still doesn't load, please create an issue on our <a href="https://github.com/lankybox02/RiverBox/issues/16">github page</a>.</span><br><button onclick="dispatchPageLoad('${pageType}')">Re-try</button></span><br><button onclick="dispatchPageLoad('home')">Go to home</button>`;
       }
     }
   }, 4000);
