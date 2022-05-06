@@ -34,6 +34,7 @@ document.getElementById("memberslist").innerHTML = `There are no members in this
 }else{
 let members = data.members.split("&");
 members.shift();
+members.shift();
 
 for (let i = members.length - 1;i > -1;i--) {
     postData('https://riverbox-api.lankybox02.repl.co/getaccount', JSON.parse(`{"username": "` + members[0] + `"}`))

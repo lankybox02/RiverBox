@@ -172,7 +172,7 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
 <br>
 <div id="posts">No posts are here.</div>
 </div></div>`,
-    "script": `setTimeout(function(){modal('holdupadminbreakagemessage')}, 2000)`,
+    "script": `// setTimeout(function(){modal('holdupadminbreakagemessage')}, 2000)`,
     "accountonly": false,
     "padding": false,
     "banner": ""
