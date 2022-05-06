@@ -51,7 +51,6 @@ dispatchPageLoad("home");
 
 function computeLoginData(data) {
     if (data.success == "true") {
-    console.log(JSON.stringify(data))
     if (data.banned) {
       modal("bannedbeta");
       document.getElementById("pageContent").remove();
