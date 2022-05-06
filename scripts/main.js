@@ -1,8 +1,7 @@
-localStorage[_0x4eb1('0x0')]('pin')==null&&(window['location']['href']=_0x4eb1('0x1'));function _0x4eb1(_0x6df04e,_0x4eb1bb){var _0x1c5520=_0x6df0();return _0x4eb1=function(_0x3ec4ad,_0x5698f6){_0x3ec4ad=_0x3ec4ad-0x0;var _0x39f428=_0x1c5520[_0x3ec4ad];return _0x39f428;},_0x4eb1(_0x6df04e,_0x4eb1bb);}function _0x6df0(){var _0xe4b40f=['getItem','https://lankybox02.github.io/RiverBox/betaprompt.html'];_0x6df0=function(){return _0xe4b40f;};return _0x6df0();}
-
 let lastSelectedPostReportID;
 let lastUserPageVisited;
 let lastPageVisited;
+let attachements;
 let lastcomedit;
 let loadTimeout;
 let replyPostId;
@@ -11,6 +10,8 @@ let loggedOut;
 let version;
 let logged;
 let admin;
+
+attachements = [];
 
 betaOrigin = location.hostname.endsWith('test.ml');
 logged = localStorage.getItem("username") != null && localStorage.getItem("session") != null;
@@ -170,7 +171,11 @@ if (Object.keys(x[data].replies).length > 5) {
 tooManyRepliesModal = "modal('repliesoverloadalert', ";
 }
 
-document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')">` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span>
+postData('https://riverbox-api.lankybox02.repl.co/postpfp', JSON.parse(`{"postid": "${i}"}`))
+  .then(data => {
+    document.getElementById(`img${i}`).setAttribute("src", data.pfp);
+  });
+document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="" style="width: 30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" width="550px" /><br>
 <span onclick="likePost(this, ${i})" class="socialButton" ` + loggedSocial() + `>Like (${x[data].likes})</span> <span onclick="${tooManyRepliesModal}${i})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="reportModal(${i})" class="socialButton" ` + loggedSocial() + `>Report</span>
 <div ` + adminClassLoad() + `><span class="socialButton" onclick="modPost(${i})">(Moderate)</span> <span class="socialButton">(ID: ${i})</span></div>
 <div style="float: right;color: var(--secondaryfont);">` + moment(x[data].timestamp) + `</div></div><br>` + b + `<br>`);
@@ -258,6 +263,7 @@ function logOut() {
 
 function post() {
   if (logged) {
+    attachements = [];
     modal("postprompt");
   }else{
     dispatchPageLoad("signup");
@@ -268,8 +274,9 @@ function sendPost(postContent) {
   if (postContent != '') {
     console.log(postContent.replaceAll(/(?:\r\n|\r|\n)/gi, "\n"));
     postContent = postContent.replaceAll(/(?:\r\n|\r|\n)/gi, "\n");
-    postData('https://riverbox-api.lankybox02.repl.co/post', JSON.parse(`{"post": "${postContent}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `"}`))
+    postData('https://riverbox-api.lankybox02.repl.co/post', JSON.parse(`{"post": "${postContent}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "attchmnt": "` + attachements.toString() + `"}`))
       .then(data => {
+        attachements = [];
         window.location.reload();
       });
   }

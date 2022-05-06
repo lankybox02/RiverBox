@@ -204,11 +204,12 @@ let modalTypes = {
   },
   "postprompt": {
     "title": "What are you thinking about?",
-    "content": `<div style="display: flex;text-align:left;">
+    "content": `<div style="text-align:left;">
     <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
     <span class="header">What are you thinking about?</span>
     <span style="margin-top: 15px;display: block;">
-    <textarea id="postText" placeholder="Write a new post here..."></textarea>
+    <div style="width:30%;margin-bottom: 20px;"><button onclick="document.getElementById('postText').value =+ '[b][/b]'">b</button> <button onclick="document.getElementById('postText').value =+ '[i][/i]'">i</button> <button onclick="document.getElementById('postText').value =+ '[u][/u]'">u</button> <button onclick="document.getElementById('postText').value =+ '[s][/s]'">s</button> <button onclick="addImage(prompt('Image URL...'))">img</button></div>
+    <textarea id="postText" style="width:30%" placeholder="Write a new post here..."></textarea>
     </span>
     <button class="highlightedButton" onclick="sendPost(document.getElementById('postText').value)">Post</button> 
     <button onclick="closeModal()">Nevermind</button>

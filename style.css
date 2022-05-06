@@ -244,6 +244,7 @@ input, select {
 
 .post {
   background-color: var(--secondary);
+  overflow-x: hidden;
   color: white;
   border-radius: 10px;
   padding: 15px;
