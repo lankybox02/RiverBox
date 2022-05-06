@@ -53,6 +53,7 @@ function computeLoginData(data) {
     if (data.success == "true") {
     if (data.banned) {
       modal("bannedbeta");
+      document.getElementById("banreason").innerText = data.bannedreason;
       document.getElementById("pageContent").remove();
       document.getElementById("navbar").remove();
       localStorage.clear();
@@ -98,7 +99,7 @@ function dispatchPageLoad(pageType, doNotSetTitle) {
     dispatchLoadingScreen();
     clearTimeout(loadTimeout);
   }else{
-    if (doNotSetTitle) {
+    if (!doNotSetTitle) {
       dispatchDocumentTitle(pageTypes[pageType].title);
     }
     if (pageTypes[pageType].padding) {
@@ -317,12 +318,6 @@ postData('https://riverbox-api.lankybox02.repl.co/like', JSON.parse(`{"username"
       e.innerText = "Liked (" + before + ")";
     }
   });
-}
-
-function exploreLoad() {
-  for (let i = featuredUsers.length - 1;i > -1;i--) {
-    document.getElementById("list").insertAdjacentHTML("beforeEnd", `<div class="explore-tile" onclick="viewUserPage('${featuredUsers[i]}')"><span>` + featuredUsers[i] + `</span></div>`)
-  }
 }
 
 function reply(postId, reply) {

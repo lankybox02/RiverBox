@@ -18,7 +18,11 @@ document.getElementById("timestamp").innerText = moment(data.timestamp);
 document.getElementById("timestamp").innerText = "???";
 }
 if (page.toLowerCase() == localStorage.getItem("username").toLowerCase()) {
-  document.getElementById("editProfileControls").outerHTML = `<br><br><b>Manage profile</b><br><span style="text-decoration:underline;cursor:pointer;" onclick="modal('editbio')">Edit biography</span><br><span style="text-decoration:underline;cursor:pointer;" onclick="modal('editprofilepic')">Edit avatar</span><br><span style="text-decoration:underline;cursor:pointer;" onclick="modal('editbanner')">Edit banner</span>`;
+  if (page.toLowerCase() == "daily_meme") {
+    document.getElementById("editProfileControls").outerHTML = `<br><br><b>Manage profile</b><br><span style="text-decoration:underline;cursor:pointer;" onclick="modal('editbio')">Edit biography</span><br><span style="text-decoration:underline;cursor:pointer;" onclick="modal('editprofilepic')">Edit avatar</span><br><span style="text-decoration:underline;cursor:pointer;" onclick="modal('editbanner')">Edit banner</span><br><br><b>Awards</b><br><i>Reddit Gold Award</i>`;
+  }else{
+    document.getElementById("editProfileControls").outerHTML = `<br><br><b>Manage profile</b><br><span style="text-decoration:underline;cursor:pointer;" onclick="modal('editbio')">Edit biography</span><br><span style="text-decoration:underline;cursor:pointer;" onclick="modal('editprofilepic')">Edit avatar</span><br><span style="text-decoration:underline;cursor:pointer;" onclick="modal('editbanner')">Edit banner</span>`;
+  }
 }
 
 if (data.posts == "&") {

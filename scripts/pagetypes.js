@@ -46,7 +46,19 @@ You may not attempt to bypass site restrictions by using alternative accounts, s
   },
   "about": {
     "title": "About",
-    "content": "<h1>About</h1>This page is still under construction!",
+    "content": `<h1>About RiverBox</h1>The internet can be a dangerous place. People are often quick to judge and spread negativity.
+<br><br>
+Imagine a social media platform where people are kind and supportive of one another. A platform where people can share their thoughts and experiences without fear of judgment. That's what RiverBox is all about!
+<br><br>
+With RiverBox, you'll have a safe, friendly place to share your thoughts and connect with others who share your interests and values. We emphasize kindness and support, so you can feel confident sharing anything!
+<br><hr><br>
+RiverBox is a social media platform for everyone that emphasizes kindness and support. We are a safe, friendly place where people can share their thoughts and experiences without fear of judgment. Our goal is to provide a platform for people to connect and build relationships with others who share their interests and values.
+<br><br>
+We believe that everyone deserves to be safe and supported online, and we are committed to making the internet a more inclusive space.
+<br><br>
+We strive to create a safe and welcoming online community for everyone. We are a diverse and inclusive community that welcomes people of all ages, races, ethnicities, religions, abilities, sexual orientations, and gender identities.
+<br>
+Our platform enables users to share their interests, creations, and learn new things from others in a friendly and welcoming environment. We believe that everyone should feel free to express themselves online without fear of judgment or harassment.`,
     "script": ``,
     "accountonly": false,
     "padding": true,
@@ -89,7 +101,7 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
   },
   "explore": {
     "title": "Explore",
-    "content": `<h1>Explore</h1><div style="text-align:left" id="tiles"><span class="header">Featured Users</span><br><div style="height: 90px;overflow-x: hidden;" id="list"></div></div>`,
+    "content": `<h1>Explore</h1><div style="text-align:left" id="tiles"><span class="header">Users to watch</span><br><div style="height: 90px;overflow-x: hidden;" id="list"></div></div>`,
     "script": `exploreLoad()`,
     "accountonly": false,
     "padding": true,
@@ -500,10 +512,12 @@ let modalTypes = {
     <div style="margin-left: 20px;padding-top:20px;">
     <span class="header">You're banned!</span>
     <span style="margin-top: 15px;display: block;">
-    The account you're trying to access is banned. If this is  your personal account, it is most likely that you broke the Terms of Service or the Community Rules & Guidelines.
+    The account you're trying to access is banned.
     <br>
     <br>
-    If you try going around this ban using alts, go ahead. Just make sure not to do the same mistakes that led you to get banned on this account 😅
+    <b>Ban reasoning:</b>
+    <br>
+    <span id="banreason"></span>
     </span>
     <button class="highlightedButton" onclick="window.location.reload()">Exit</button>
     </div>
