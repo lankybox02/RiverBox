@@ -4,7 +4,6 @@ function moment(date) {
   let day;
     j = date.length - 2;
     a = date.length - 1;
-    console.log(date.slice(0, -a));
     if (date.slice(1, -j) == "/") {
       day = days[date.slice(0, -a)];
     }else{
