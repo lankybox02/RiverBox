@@ -60,6 +60,6 @@ function encodeProfilePost(data) {
 if (data.content == "<span class='moderated-post-text'>(This post was moderated)</span>") {
 document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><br><div class="post">` + data.content + `</div>`)
 }else{
-document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><br><div class="post">` + atob(data.content) + `</div>`)
+document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><br><div class="post">` + atob(data.content) + `<img src="` + data.attchmnt + `" width="450px" /></div>`)
 }
 }
