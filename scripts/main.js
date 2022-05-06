@@ -175,7 +175,7 @@ postData('https://riverbox-api.lankybox02.repl.co/postpfp', JSON.parse(`{"postid
   .then(data => {
     document.getElementById(`img${i}`).setAttribute("src", data.pfp);
   });
-document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="" style="width: 30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" width="550px" /><br>
+document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="" style="width: 30px;height:30px;border-radius:30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" width="550px" /><br>
 <span onclick="likePost(this, ${i})" class="socialButton" ` + loggedSocial() + `>Like (${x[data].likes})</span> <span onclick="${tooManyRepliesModal}${i})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="reportModal(${i})" class="socialButton" ` + loggedSocial() + `>Report</span>
 <div ` + adminClassLoad() + `><span class="socialButton" onclick="modPost(${i})">(Moderate)</span> <span class="socialButton">(ID: ${i})</span></div>
 <div style="float: right;color: var(--secondaryfont);">` + moment(x[data].timestamp) + `</div></div><br>` + b + `<br>`);
