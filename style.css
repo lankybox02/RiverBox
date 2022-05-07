@@ -9,7 +9,7 @@
 }
 
 body {
-  font-family: helvetica;
+  font-family: helvetica, sans-serif;
   background-color: var(--background);
   color: var(--font);
   margin: 0;
