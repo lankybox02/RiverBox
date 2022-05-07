@@ -1,15 +1,27 @@
 let lastSelectedPostReportID;
 let lastUserPageVisited;
 let lastPageVisited;
+let lastfetcheduser;
 let attachements;
 let lastcomedit;
 let loadTimeout;
 let replyPostId;
 let betaOrigin;
 let loggedOut;
+let accowner;
 let version;
 let logged;
 let admin;
+
+let awardsList = {
+    "1": "awards/bronzemedal.png",
+    "2": "awards/silvermedal.png",
+    "3": "awards/goldmedal.png",
+    "4": "awards/bronzetrophy.png",
+    "5": "awards/silvertrophy.png",
+    "6": "awards/goldtrophy.png",
+    "7": "awards/diamondaward.png",
+}
 
 attachements = [];
 
@@ -79,7 +91,7 @@ function dispatchPageLoad(pageType, doNotSetTitle) {
   dispatchLoadingScreen();
   lastPageVisited = pageType;
   if (pageTypes[pageType] != null) {
-   
+    disablecbm();
     if (document.getElementById("accountDropdown") != null) {
       document.getElementById("accountDropdown").removeAttribute("open");
     }   
@@ -175,8 +187,7 @@ postData('https://riverbox-api.lankybox02.repl.co/postpfp', JSON.parse(`{"postid
   .then(data => {
     document.getElementById(`img${i}`).setAttribute("src", data.pfp);
   });
-document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="" style="width: 30px;height:30px;border-radius:30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" width="550px" /><br>
-<span onclick="likePost(this, ${i})" class="socialButton" ` + loggedSocial() + `>Like (${x[data].likes})</span> <span onclick="${tooManyRepliesModal}${i})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="reportModal(${i})" class="socialButton" ` + loggedSocial() + `>Report</span>
+document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="" style="width: 30px;height:30px;border-radius:30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" width="550px" /><br><span onclick="${tooManyRepliesModal}${i})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="reportModal(${i})" class="socialButton" ` + loggedSocial() + `>Report</span>
 <div ` + adminClassLoad() + `><span class="socialButton" onclick="modPost(${i})">(Moderate)</span> <span class="socialButton">(ID: ${i})</span></div>
 <div style="float: right;color: var(--secondaryfont);">` + moment(x[data].timestamp) + `</div></div><br>` + b + `<br>`);
 }
@@ -304,21 +315,21 @@ postData('https://riverbox-api.lankybox02.repl.co/remove', JSON.parse(`{"usernam
   });
 }
 
-function likePost(e, postId) {
-let before = e.innerText.replace(/\D/g, "");
-let newCount = parseInt(before) + 1;
-e.innerText = "Liked (...)";
-e.style.fontDecoration = null;
-e.style.cursor = null;
-postData('https://riverbox-api.lankybox02.repl.co/like', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "post": "${postId}"}`))
-  .then(data => {
-    if (data.success) {
-      e.innerText = "Liked (" + newCount.toString() + ")";
-    }else{
-      e.innerText = "Liked (" + before + ")";
-    }
-  });
-}
+// function likePost(e, postId) {
+// let before = e.innerText.replace(/\D/g, "");
+// let newCount = parseInt(before) + 1;
+// e.innerText = "Liked (...)";
+// e.style.fontDecoration = null;
+// e.style.cursor = null;
+// postData('https://riverbox-api.lankybox02.repl.co/like', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "post": "${postId}"}`))
+//   .then(data => {
+//     if (data.success) {
+//       e.innerText = "Liked (" + newCount.toString() + ")";
+//     }else{
+//       e.innerText = "Liked (" + before + ")";
+//     }
+//   });
+// }
 
 function reply(postId, reply) {
   postData('https://riverbox-api.lankybox02.repl.co/reply', JSON.parse(`{"post": "${postId}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "reply": "${reply}"}`))

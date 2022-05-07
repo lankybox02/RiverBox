@@ -160,7 +160,7 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
 </div>
 
 <div style="display:flex;margin-top: 20px;margin-left: 20%;">
-<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>Biography</b><br><span id="bio"></span><br><br><b>Role</b><br><span id="role"></span><br><br><b>Statistics</b><br>Joined <span id="timestamp"></span><div id="editProfileControls"></div></div>
+<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>Biography</b><br><span id="bio"></span><br><br><b>Role</b><br><span id="role"></span><br><br><b>Statistics</b><br>Joined <span id="timestamp"></span><!--<br><br><b>Awards</b><br>This user has no awards. --><div id="editProfileControls"></div></div>
 <div style="padding: 10px 10px 5px 5px;" id="posts"><span class="header" style="margin-bottom: 20px;"><span id="username"></span>'s Posts</span>
 <br>
 <div id="posts"></div>

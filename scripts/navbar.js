@@ -1,6 +1,7 @@
 function insertNav(username) {
 let adminPageLink;
 if (admin == 'true') {
+  // document.getElementById("navbar").style.backgroundColor = "#edc618";
   adminPageLink = `<span onclick="window.location.href = 'https://lankybox02.github.io/RiverBox/tickets.html'">Tickets</span>`;
 }else{
   adminPageLink = "";

@@ -13,6 +13,9 @@ dispatchDocumentTitle(data.name);
 function viewCommunity(page) {
 postData('https://riverbox-api.lankybox02.repl.co/getcommunity', JSON.parse(`{"communityid": "${page}"}`))
   .then(data => {
+    if (data.error != null) {
+      modal("", "Error loading this community!")
+    }else{
 dispatchPageLoad("community", true);
 document.getElementById("banner").setAttribute("src", data.banner);
 document.getElementById("name").innerText = data.name;
@@ -43,5 +46,6 @@ for (let i = members.length - 1;i > -1;i--) {
   });
 }
 }
+    }
 });
 }

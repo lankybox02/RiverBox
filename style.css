@@ -102,6 +102,7 @@ body {
 
 .header {
   font-size: 30px;
+  text-shadow: 0 0 20px black;
 }
 
 textarea {
@@ -197,6 +198,7 @@ input, select {
   bottom: 30px;
   right: 30px;
   cursor: pointer;
+  box-shadow: 1px 1px 100px #363636;
 }
 
 .modal {
