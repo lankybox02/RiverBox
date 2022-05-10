@@ -1,4 +1,5 @@
 function renameAboutCom(id, newAbout) {
+  if (!state.flags.communities) return;
 postData('https://riverbox-api.lankybox02.repl.co/communitynewabout',  JSON.parse(`{"id": "${id}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "about": "` + newAbout.replaceAll(`"`, "&quot;") + `"}`))
   .then(data => {
 dispatchPageLoad("community", true);
@@ -11,7 +12,8 @@ dispatchDocumentTitle(data.name);
 }
 
 function viewCommunity(page) {
-postData('https://riverbox-api.lankybox02.repl.co/getcommunity', JSON.parse(`{"communityid": "${page}"}`))
+  if (!state.flags.communities) return;
+  postData('https://riverbox-api.lankybox02.repl.co/getcommunity', JSON.parse(`{"communityid": "${page}"}`))
   .then(data => {
     if (data.error != null) {
       modal("", "Error loading this community!")
@@ -48,4 +50,12 @@ for (let i = members.length - 1;i > -1;i--) {
 }
     }
 });
+}
+
+function createCommunity(name) {
+  if (!state.flags.communities) return;
+    postData('https://riverbox-api.lankybox02.repl.co/createcommunity', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "name": "${name}"}`))
+    .then(data => {
+        viewCommunity(data.id);
+    });
 }

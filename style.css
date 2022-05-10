@@ -1,3 +1,7 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
 :root {
   --background: #111a27;
   --primary: rgba(34, 35, 48, 0.6);
@@ -8,16 +12,16 @@
   --postfont: white;
 }
 
+body, html {
+  height: 100%;
+}
+
 body {
   font-family: helvetica;
   background-color: var(--background);
   color: var(--font);
   margin: 0;
   margin-top: 50px;
-}
-
-::-webkit-scrollbar {
-    display: none;
 }
 
 #navbar {
@@ -296,4 +300,28 @@ a {
 
 summary {
   cursor: pointer;
+}
+
+#newmsg {
+  position: absolute;
+  right: 20px;
+  top: 60px;
+  padding: 10px;
+  background-color: var(--primary);
+  border-radius: 2px;
+}
+
+li {
+  margin-bottom: 5px;
+  text-align: center;
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 20px 10px 20px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+li:hover {
+  font-size: 20px;
 }

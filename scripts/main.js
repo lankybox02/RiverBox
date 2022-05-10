@@ -12,6 +12,7 @@ let accowner;
 let version;
 let logged;
 let admin;
+let state;
 
 let awardsList = {
     "1": "awards/bronzemedal.png",
@@ -24,6 +25,7 @@ let awardsList = {
 }
 
 attachements = [];
+state = {};
 
 betaOrigin = location.hostname.endsWith('test.ml');
 logged = localStorage.getItem("username") != null && localStorage.getItem("session") != null;
@@ -34,16 +36,21 @@ if (betaOrigin) {
   version = "Public";
 }
 
-document.getElementById("version").innerText = version + " Beta 1.2";
+document.getElementById("version").innerText = version + " " + ver__;
 
-fetch("https://riverbox-api.lankybox02.repl.co/")
-   .then(response => response.json())
-   .then(data => maintenanceCheck(data.maintenance))
+function updateState() {
+  fetch("https://riverbox-api.lankybox02.repl.co/")
+     .then(response => response.json())
+     .then(data => dispatchState(data.flags))
+}
 
-function maintenanceCheck(maintenance) {
-  if (maintenance && !betaOrigin) {
+updateState()
+
+function dispatchState(flags) {
+  if (flags.maintenance /* && !betaOrigin */) {
     document.body.innerHTML = `<h1 style="padding-left:20px">503 Maintenance</h1>`;
   }
+  state.flags = flags;
 }
 
 if (ipExpActivated && localStorage.getItem("ip") == null) {
@@ -61,8 +68,24 @@ insertNav("$");
 dispatchPageLoad("home");
 }
 
+function newmsgcheck(data, alert) {
+if (data.newmessages) {
+  if (alert) {
+    $("#pageContent").effect("shake");
+    setTimeout(function(){
+        modal("", `You have incoming messages! <span class="link" onclick="dispatchPageLoad('messages');closeModal();">Click to view your messages page</span>.`, "dismissMsg()");
+    }, 500)
+  }else{
+    document.body.insertAdjacentHTML("beforeEnd", `
+    <div id="newmsg">You have a new message!</div>
+    `);
+  }
+}
+}
+
 function computeLoginData(data) {
     if (data.success == "true") {
+    state.session = data;
     if (data.banned) {
       modal("bannedbeta");
       document.getElementById("banreason").innerText = data.bannedreason;
@@ -70,6 +93,7 @@ function computeLoginData(data) {
       document.getElementById("navbar").remove();
       localStorage.clear();
     }else{
+      newmsgcheck(data, true);
       admin = data.admin;
       insertNav(data.username);
     }
@@ -84,10 +108,12 @@ function computeLoginData(data) {
 
 function dispatchLoadingScreen() {
 document.getElementById("pageContent").innerHTML = `<div class="loader"></div><br><span class="header">Give us a moment...</span>`;
-document.getElementById("pageContent").style.paddingTop = "30px";
+document.getElementById("pageContent").style.paddingTop = "80px";
 }
 
 function dispatchPageLoad(pageType, doNotSetTitle) {
+  updateState();
+  updateTheme();
   dispatchLoadingScreen();
   lastPageVisited = pageType;
   if (pageTypes[pageType] != null) {
@@ -108,7 +134,6 @@ function dispatchPageLoad(pageType, doNotSetTitle) {
     }
     
     if (pageTypes[pageType].accountonly == true && loggedOut == true) {
-    dispatchLoadingScreen();
     clearTimeout(loadTimeout);
   }else{
     if (!doNotSetTitle) {
@@ -119,13 +144,11 @@ function dispatchPageLoad(pageType, doNotSetTitle) {
     }else{
       document.getElementById("pageContent").style.paddingTop = null;
     }
-    document.getElementById("pageContent").innerHTML = pageTypes[pageType].content;
-    eval(pageTypes[pageType].script);
+      $('#pageContent').hide();
+      $('#pageContent').show("fade");
+      document.getElementById("pageContent").innerHTML = pageTypes[pageType].content;
+      eval(pageTypes[pageType].script);
     clearTimeout(loadTimeout)
-
-    if (pageType == "home") {
-      document.body.insertAdjacentHTML("beforeEnd", `<div class="post-button" onclick="post()">+</div>`)
-    }
   }
     }
   loadTimeout = setTimeout(function(){
@@ -139,7 +162,13 @@ function dispatchPageLoad(pageType, doNotSetTitle) {
       document.getElementById("pageContent").innerHTML = `<br><br><span class="header">Are you sure you're in the right place?</span><br><span>The page you have tried to load didn't return any response - it's either broken or does not exist.<br>If you're most certain this page should be loading correctly, please click the button below.<br>If it still doesn't load, please create an issue on our <a href="https://github.com/lankybox02/RiverBox/issues/16">github page</a>.</span><br><button onclick="dispatchPageLoad('${pageType}')">Re-try</button>`;
       }
     }
-  }, 4000);
+  }, 6000);
+  if (state.session != undefined) {
+    if (state.session.username == 'lanksy' && pageType != 'userpage') {
+      $("body").css("background-image", "url(https://u.cubeupload.com/lankysback/Dzh3rf.jpg)");
+      $("body").css("background-attachment", "fixed");
+    }
+  }
 }
 
 function dispatchDocumentTitle(title, disbaleRiverBoxBranding) {
@@ -284,6 +313,8 @@ function post() {
 function sendPost(postContent) {
   if (postContent != '') {
     console.log(postContent.replaceAll(/(?:\r\n|\r|\n)/gi, "\n"));
+    loadFull();
+    closeModal();
     postContent = postContent.replaceAll(/(?:\r\n|\r|\n)/gi, "\n");
     postData('https://riverbox-api.lankybox02.repl.co/post', JSON.parse(`{"post": "${postContent}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "attchmnt": "` + attachements.toString() + `"}`))
       .then(data => {
@@ -291,28 +322,6 @@ function sendPost(postContent) {
         window.location.reload();
       });
   }
-}
-
-function modal(modalType, customMessage) {
-
-  if (modalType == "") {
-    document.getElementById("modal-header").innerText = "Message";
-    document.getElementById("modal-content").innerHTML = customMessage + `<br><br><button onclick="closeModal()" class="highlightedButton">Dismiss</button>`;
-  }else{
-    document.getElementById("modal-header").innerText = modalTypes[modalType].title;
-    document.getElementById("modal-content").innerHTML = modalTypes[modalType].content;
-  } document.getElementById("myModal").style.display = "block";
-}
-
-function closeModal() {
-  document.getElementById("myModal").style.display = "none";
-}
-
-function modPost(postId) {
-postData('https://riverbox-api.lankybox02.repl.co/remove', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "post": "` + postId + `"}`))
-  .then(data => {
-    window.location.reload();
-  });
 }
 
 // function likePost(e, postId) {
@@ -332,6 +341,8 @@ postData('https://riverbox-api.lankybox02.repl.co/remove', JSON.parse(`{"usernam
 // }
 
 function reply(postId, reply) {
+  loadFull();
+  closeModal();
   postData('https://riverbox-api.lankybox02.repl.co/reply', JSON.parse(`{"post": "${postId}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "reply": "${reply}"}`))
   .then(data => {
       window.location.reload();
@@ -355,20 +366,57 @@ function report(postId, reason) {
     });
 }
 
-function createCommunity(name) {
-    postData('https://riverbox-api.lankybox02.repl.co/createcommunity', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "name": "${name}"}`))
-    .then(data => {
-        viewCommunity(data.id);
-    });
-}
-
 function changeSession(newSession) {
+loadFull();
 postData('https://riverbox-api.lankybox02.repl.co/changesession', JSON.parse(`{"newsession": "${newSession}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `"}`))
   .then(data => {
     window.location.reload();
   });
 }
 
+function loadMessages() {
+  postData('https://riverbox-api.lankybox02.repl.co/messages', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session")})
+  .then(data => {
+    document.getElementById("pageContent").innerHTML = "<h1>Messages</h1><div id='msgs'></div>";
+    for (let i = 0;i < Object.keys(data).length;i++) {
+      document.getElementById("msgs").insertAdjacentHTML("afterBegin", `<div style="padding: 20px;background-color: #f7f7f7;color: black;border-radius: 20px;margin-top:10px;width:60vh;display:inline-block">` + data[i].content.replaceAll("<", "&lt;").replaceAll(">", "&gt;") + ` - <span style="color: #919191;">` + moment(data[i].timestamp) + `</span></div><br>`);
+    }
+  });
+}
 
-// messages:
-// <br><span style="padding: 20px;background-color: #f7f7f7;color: black;border-radius: 20px;"><span class="link" style="color: black;">LankyBox01</span> has invited you to join <span class="link">the Teenagers Club</span> - <span style="color: #919191;">just now</span></span>
+function dismissMsg() {
+  postData('https://riverbox-api.lankybox02.repl.co/messages', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session")})
+  .then(data => {
+  });
+}
+
+setInterval(function(){
+fetch("https://riverbox-api.lankybox02.repl.co/signin/" + localStorage.getItem("username") + "/" + localStorage.getItem("session"))
+   .then(response => response.json())
+   .then(data => newmsgcheck(data, true))
+}, 10000)
+
+function loadFull() {
+  $('body').css("pointerEvents","none");
+  $("#version").hide("fade");
+  $("#navbar").hide("fade");
+  $(".post-button").hide("fade");
+  document.getElementById("pageContent").innerText = "Loading...";
+}
+
+function socialMediaAttach() {
+  modal("", `
+  <select id="social">
+  <option value="yt">YouTube</option>
+  <option value="wo">WasteOf</option>
+  <option value="tt">Twitter</option>
+  <option value="gh">Github</option>
+  <option value="fb">FaceBook</option>
+  <option value="sh">Scratch</option>
+  </select> <input id="url" placeholder="URL to your account..." /><br><br><button class="highlightedButton" onclick="applySocial(document.getElementById('social').value, document.getElementById('url').value)">Apply!</button> <button onclick="closeModal()">Nevermind...</button>`, "", "Add social media...", false)
+}
+
+function applySocial(social, url) {
+  closeModal();
+  loadFull();
+}

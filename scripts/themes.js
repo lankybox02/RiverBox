@@ -20,11 +20,15 @@ function darkMode() {
     r.style.setProperty('--secondaryfont', 'white');
 }
 
-if(localStorage.getItem("theme") == "light") {
-  lightMode();
-}else{
-  darkMode();
+function updateTheme() {
+  if(localStorage.getItem("theme") == "light") {
+    lightMode();
+  }else{
+    darkMode();
+  }
 }
+
+updateTheme()
 
 function changeTheme() {
   let theme = document.getElementById("theme").value;

@@ -6,6 +6,8 @@
   <title>Tickets - RiverBox</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
   <link rel="icon" type="image/x-icon" href="assets/logo.png">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 </head>
 <body>
   <!-- Navigation bar -->
@@ -15,8 +17,17 @@
   <div id="pageContent" style="padding-top: 20px">
     Loading...
   </div>
+  <!-- Blank modal to be triggered -->
+  <div id="myModal" class="modal">
+    <div class="modal-content" id="myModalContent">
+      <div id="modal-header">modal.header</div>
+      <p id="modal-content">modal.content</p>
+    </div>
+  </div>
   <!-- Administrator scripts -->
+  <script src="scripts/pagetypes.js"></script>
   <script src="scripts/navbar.js"></script>
   <script src="scripts/admin.js"></script>
+  <script src="scripts/mdls.js"></script>
 </body>
 </html>

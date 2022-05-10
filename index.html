@@ -6,6 +6,8 @@
   <title>Home - RiverBox</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
   <link rel="icon" type="image/x-icon" href="assets/logo.png">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
   <script>
     let ip;
     let ipExpActivated = false; // true if we're asking for IPs
@@ -34,7 +36,7 @@
   <span id="version"></span>
   <!-- Blank modal to be triggered -->
   <div id="myModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" id="myModalContent">
       <div id="modal-header">modal.header</div>
       <p id="modal-content">modal.content</p>
     </div>
@@ -42,15 +44,42 @@
   <!-- Insert all page scripts -->
   <script src="scripts/community-functions.js"></script>
   <script src="scripts/profile-functions.js"></script>
+  <script src="scripts/websiteversion.js"></script>
   <script src="scripts/tickets-load.js"></script>
   <script src="scripts/admin-tools.js"></script>
   <script src="scripts/pagetypes.js"></script>
   <script src="scripts/console.js"></script>
+  <script src="scripts/shuffle.js"></script>
   <script src="scripts/navbar.js"></script>
   <script src="scripts/moment.js"></script>
   <script src="scripts/themes.js"></script>
   <script src="scripts/image.js"></script>
   <script src="scripts/main.js"></script>
+  <script src="scripts/mdls.js"></script>
   <script src="exploredata.js"></script>
+  <script>
+    setTimeout(function(){
+      if (betaOrigin) {
+let allowedUsers = ["lanksy", "pkmnq", "hyphen2", "zu-", "bobcat0701", "ankit_anmol", "willy", "lynxie", "daily_meme"];
+
+if (state.session == undefined) {
+  $("#navbar").hide();
+  $("#version").hide();
+  $(".post-button").hide();
+  $("#pageContent").html(`<h1>Beta-testing page</h1><p>This page is for beta-testers only.</p><button class="highlightedButton" onclick="modal('adminlogin')">I am a beta-tester.</button>`);
+}else{
+if (!allowedUsers.some(v => state.session.username.toLowerCase().includes(v))) {
+  $("#navbar").hide();
+  $("#version").hide();
+  $(".post-button").hide();
+  $("#pageContent").html(`<button class="highlightedButton" onclick="logOut()">Log Out</button>`);
+  modal("", "403 Unauthorised");
+}
+}
+}
+    }, 1000)
+  </script>
+  <!-- Post button -->
+  <div class="post-button" onclick="post()">+</div>
 </body>
 </html>

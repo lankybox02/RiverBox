@@ -10,10 +10,10 @@ let pageTypes = {
   "terms": {
     "title": "Terms of Service",
     "content": `<h1>RiverBox Terms of Service</h1>
-By creating an account on RiverBox you agree that you have read, understood, and will comply with the following terms of service while using them.
+By creating an account on RiverBox you agree that you have read, understood, and will comply with the following terms of service while using them. If you do not agree, please do not create an account on RiverBox.
 
 <h2>Account Requirements</h2>
-In order to create an account on RiverBox, you agree that you are not a minor, and if you are, you agree that you have parental permission to use the site. If you do not agree, please do not create an account on RiverBox.
+In order to create an account on RiverBox, you agree that you are not a minor, and if you are, you agree that you have parental permission to use the site.
 <br>
 You may not create an account for the sole purpose of automating social actions (social actions such as posting, changing your biography, banner, profile picture, and so on).
 <br>
@@ -29,16 +29,8 @@ You may not post any copyrighted content without the rights to the material you 
 You may not falsely report any content on the RiverBox website or attempt to trick the moderation team.
 <br>
 You may not attempt to bypass site restrictions by using alternative accounts, scripts, exploits, or otherwise. (For example, trying to go around an account ban or access moderation tools not intended to be accessed by the average user)
-<h2>User Roles & Badges</h2>
-<b>Owner</b> - This badge is assigned to the owner of the RiverBox website. <i>The Owner badge can post and modify any content on the site.</i>
-<br>
-<b>Administrator</b> - This badge is assigned to RiverBox administrators. <i>The Administrator badge can post and modify any content on the site.</i>
-<br>
-<b>Beta-tester</b> - This badge is assigned to users who test new RiverBox updates before their release. <i>The Beta-tester badge has early access to new RiverBox updates.</i>
-<br>
-<b>User</b> - This badge is assigned to regular RiverBox users. <i>The User badge has no explicit permissions.</i>
-<br>
-<b>Banned</b> - This badge is given to RiverBox users who are currently banned. <i>The Banned badge cannot post or edit any content they have published on RiverBox.</i>`,
+<h2>Account Termination</h2>
+If we believe you have disrespected the Terms listed above, we reserve the right to terminate the access to your account, respectively.`,
     "script": ``,
     "accountonly": false,
     "padding": true,
@@ -110,7 +102,7 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
   "settings": {
     "title": "Settings",
     "content": `<h1>Settings</h1>
-<span class="header">Theme</span><br><select onchange="changeTheme()" id="theme"><option value="dark">Dark Mode</option><option value="light" id="light">Light Mode</option></select><br><br><span class="header">Account</span><br><button onclick="logOut()">Log Out</button>`,
+<span class="header">Theme</span><br><select onchange="changeTheme()" id="theme"><option value="dark">Dark Mode</option><option value="light" id="light">Light Mode</option></select><br><br><span class="header">Account</span><br><button onclick="logOut()">Log Out</button><br><button onclick="modal('changesession')">Change Password</button>`,
     "script": `if(localStorage.getItem("theme") == "light"){document.getElementById("light").setAttribute("selected", "")}`,
     "accountonly": true,
     "padding": true,
@@ -128,12 +120,17 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
     <span style="margin-top: 5px;display: block;color: #ff7070;" id="signup-error"></span>
     <input placeholder="Insert a username..." id="usernameInput" type="username" autocomplete="off" />
     <input placeholder="Insert a password..." id="sessionInput" type="password" autocomplete="off" />
+    <p>Read the <span class="link" onclick="dispatchPageLoad('terms')">Terms of Service</span> and <span class="link" onclick="dispatchPageLoad('guidelines')">Community Guidelines</span>.</p>
     <button style="margin-top: 10px;" onclick="signUp()">
       Sign up!
     </button>
     <br><br>
     <span style="font-weight:bold">Username requirements:</span>
-    <ul><li>A username can only contain letters (a-z, A-Z), dash (-) and underscore (_)</li><li>A username can only be between 3 to 20 characters long</li><li>A username may not contain anything offensive or inappropriate</li></ul>
+<br><br>
+    A username can only contain letters (a-z, A-Z), dash (-) and underscore (_)
+<br>
+A username can only be between 3 to 20 characters long
+<br>A username may not contain anything offensive or inappropriate
 <span><b>Warning:</b> The sign-up API is still in its early stages and may give out some random errors sometimes. If you encounter one, please alert us on our <a href="https://github.com/lankybox02/RiverBox">github page</a>!</span>
     </div>
 </div>`,
@@ -154,13 +151,27 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
     "title": "Userpage",
     "content": `<div style="text-align: left !important;padding: 0;"><img src="" style="object-fit: cover;width: 100%;height: 30vh;object-position: 50% 50%;opacity: 0.8" id="banner"><br>
 
-<div style="margin-left: 20%;margin-top:-75px;opacity: 0.99;">
+<div style="display:flex">
+<div style="margin-left: 20%;margin-top:-75px;opacity: 0.99;background-color: var(--primary);padding: 15px;border-radius: 10px;display: inline-block;">
     <img src="" style="width:100px;height:100px;border-radius:150px;box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);vertical-align:middle" id="pfp">
-    <span class="header" style="margin-left:10px;font-size: 40px;" id="usernameheader"></span>
+    <span class="header" style="margin-left:10px;font-size: 40px;" id="usernameheader"></span> <img src="" id="role" style="width:25px;margin-left:5px;filter: drop-shadow(2px 4px 6px black);" />
+<br>
+<div style="margin-top: -37px;margin-left: 115px;"><div style="display: inline-block;padding: 9px;border-radius: 20px;vertical-align: middle;" id="statushex"></div>
+<span id="status">Fetching status...</span>
+</div>
+</div>
+<div style="margin-left: 1%;margin-top:-75px;opacity: 0.99;padding-bottom:7px;background-color: var(--primary);padding: 15px;border-radius: 10px;display: inline-block;display:none" id="linkssection">
+    <b>Links</b>
+<ul style="padding:0">
+<li>YouTube</li>
+<li>Github</li>
+<li>WasteOf</li>
+</ul>
+</div>
 </div>
 
 <div style="display:flex;margin-top: 20px;margin-left: 20%;">
-<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>Biography</b><br><span id="bio"></span><br><br><b>Role</b><br><span id="role"></span><br><br><b>Statistics</b><br>Joined <span id="timestamp"></span><!--<br><br><b>Awards</b><br>This user has no awards. --><div id="editProfileControls"></div></div>
+<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>Biography</b><br><span id="bio"></span><br><br><b>Statistics</b><br>Joined <span id="timestamp"></span><br><br><b>Awards</b><br><span id="awards"></span><div id="editProfileControls"></div></div>
 <div style="padding: 10px 10px 5px 5px;" id="posts"><span class="header" style="margin-bottom: 20px;"><span id="username"></span>'s Posts</span>
 <br>
 <div id="posts"></div>
@@ -191,11 +202,11 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
   },
   "messages": {
     "title": "Messages",
-    "content": `<h1>Messages</h1>You do not seem to have any messages right now. Check back later!`,
-    "script": ``,
+    "content": `<h1>Messages</h1>`,
+    "script": `dispatchPageLoad();loadMessages()`,
     "accountonly": true,
     "padding": true,
-    "banner": "This page is still being worked on."
+    "banner": ""
   }
 }
 
@@ -366,7 +377,7 @@ let modalTypes = {
     <div style="margin-left: 20px;padding-top:20px;">
     <span class="header">There's too many replies here!</span>
     <span style="margin-top: 15px;display: block;">
-    This post has reached the reply limit of 5 replies.
+    This post has reached the reply limit of 6 replies.
     </span>
     <button onclick="closeModal()" class="highlightedButton">Dismiss</button>
     </div>
@@ -520,6 +531,19 @@ let modalTypes = {
     <span id="banreason"></span>
     </span>
     <button class="highlightedButton" onclick="window.location.reload()">Exit</button>
+    </div>
+</div>`
+  },
+  "hashanmsasdr": {
+    "title": "Are you sure you're supposed to be here?",
+    "content": `<div style="display: flex;text-align:left;">
+    <img src="assets/wait.png" width="300px">
+    <div style="margin-left: 20px;padding-top:20px;">
+    <span class="header">Are you sure you're supposed to be here?</span>
+    <span style="margin-top: 15px;display: block;">
+    Hol'up.. you do not have authorisation to access this page. This page is meant to be for administrators only!
+    </span>
+    <button class="highlightedButton" onclick="window.location.href = '/'">Nevermind...</button>
     </div>
 </div>`
   }

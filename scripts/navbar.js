@@ -2,7 +2,7 @@ function insertNav(username) {
 let adminPageLink;
 if (admin == 'true') {
   // document.getElementById("navbar").style.backgroundColor = "#edc618";
-  adminPageLink = `<span onclick="window.location.href = 'https://lankybox02.github.io/RiverBox/tickets.html'">Tickets</span>`;
+  adminPageLink = `<span onclick="window.location.href = 'tickets.html'">Tickets</span>`;
 }else{
   adminPageLink = "";
 }
@@ -13,9 +13,9 @@ accountControls = `
 <details id="accountDropdown">
     <summary style="list-style-type: none;cursor:pointer;">${username} &#8628;</summary>
     <div class="dropdown">
-      <span onclick="viewUserPage('${username}')">Account</span>
+      <span onclick="viewUserPage('${username}')">Profile</span>
       <span onclick="dispatchPageLoad('settings')">Settings</span>
-      <span onclick="dispatchPageLoad('messages')">Messages</span>
+      <span onclick="dispatchPageLoad('messages')">DMs</span>
       <span onclick="logOut()">Log out</span>
     </div>
 </details>
@@ -37,6 +37,8 @@ RiverBox
 </div>
 <span onclick="dispatchPageLoad('explore')">Explore</span>
 <span onclick="dispatchPageLoad('about')">About</span>
+<span onclick="dispatchPageLoad('terms')">Terms</span>
+<span onclick="dispatchPageLoad('guidelines')">Guidelines</span>
 ${adminPageLink}
 ${accountControls}
 `;
@@ -51,7 +53,7 @@ accountControls = `
 `;
 
 document.getElementById("navbar").innerHTML = `
-<div class="homeNavButtons" onclick="document.location.href = 'https://lankybox02.github.io/RiverBox/'">
+<div class="homeNavButtons" onclick="document.location.href = '/'">
 <img src="assets/logo.png" id="adminLogo">
 RiverBox
 </div>
