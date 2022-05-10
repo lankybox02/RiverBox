@@ -38,6 +38,9 @@ function follow() {
 }
 
 function viewUserPage(page) {
+  if(state.session == undefined) {
+    modal("", "You need to be logged in to access user pages!")
+  }else{
   if (page.charAt(0) == "@") {
     page = page.slice(1);
   }
@@ -160,6 +163,7 @@ if (data.content == "<span class='moderated-post-text'>(This post was moderated)
 document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><br><div class="post">` + data.content + `</div>`)
 }else{
 document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><div class="post">` + atob(data.content) + `<img src="` + data.attchmnt + `" width="450px" /><br><div style="float: right;color: var(--secondaryfont);">` + moment(data.timestamp) + `</div></div><br>${b}`)
+}
 }
 }
 }
