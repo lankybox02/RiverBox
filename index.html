@@ -20,6 +20,12 @@
         }
         closeModal();
     }
+    
+    function dispatchState(newstate) {
+      state = newstate;
+      state.origin = false;
+      computeLoginData(state.session);
+    }
   </script>
 </head>
 <body>
@@ -45,7 +51,6 @@
   <script src="scripts/community-functions.js"></script>
   <script src="scripts/profile-functions.js"></script>
   <script src="scripts/websiteversion.js"></script>
-  <script src="scripts/tickets-load.js"></script>
   <script src="scripts/admin-tools.js"></script>
   <script src="scripts/pagetypes.js"></script>
   <script src="scripts/console.js"></script>
@@ -56,29 +61,9 @@
   <script src="scripts/image.js"></script>
   <script src="scripts/main.js"></script>
   <script src="scripts/mdls.js"></script>
+  <script src="scripts/mod.js"></script>
   <script src="exploredata.js"></script>
-  <script>
-    setTimeout(function(){
-      if (betaOrigin) {
-let allowedUsers = ["lanksy", "pkmnq", "hyphen2", "zu-", "bobcat0701", "ankit_anmol", "willy", "lynxie", "daily_meme"];
-
-if (state.session == undefined) {
-  $("#navbar").hide();
-  $("#version").hide();
-  $(".post-button").hide();
-  $("#pageContent").html(`<h1>Beta-testing page</h1><p>This page is for beta-testers only.</p><button class="highlightedButton" onclick="modal('adminlogin')">I am a beta-tester.</button>`);
-}else{
-if (!allowedUsers.some(v => state.session.username.toLowerCase().includes(v))) {
-  $("#navbar").hide();
-  $("#version").hide();
-  $(".post-button").hide();
-  $("#pageContent").html(`<button class="highlightedButton" onclick="logOut()">Log Out</button>`);
-  modal("", "403 Unauthorised");
-}
-}
-}
-    }, 1000)
-  </script>
+  <!-- Removed beta origin permission check - no longer a worry -->
   <!-- Post button -->
   <div class="post-button" onclick="post()">+</div>
 </body>

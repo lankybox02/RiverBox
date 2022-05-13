@@ -1,3 +1,25 @@
+let cbmmode;
+
+function setProfileMedia(link, pfporbanner) {
+  loadFull();
+  if (link.startsWith("http") && link.includes("://") && link.includes(".") && /(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(link) && link.length > 19) {
+    postData('https://riverbox-api.lankybox02.repl.co/' + pfporbanner, JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "media": "` + link + `"}`))
+    .then(data => {
+        window.location.reload();
+    });
+  }else{
+    modal("", "The link you have provided is either invalid or not an image.");
+  }
+}
+
+function editBio(lastBioEntered) {
+  loadFull();
+  postData('https://riverbox-api.lankybox02.repl.co/bio', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "bio": "` + lastBioEntered + `"}`))
+  .then(data => {
+      window.location.reload();
+  });
+}
+
 let hexes = {
   "red": {
     "main": "#ff2d2d",
@@ -64,27 +86,17 @@ if (data.cbm) {
 darkMode();
 if (localStorage.getItem("newtouserpages") == null) {
   localStorage.setItem("newtouserpages", false);
-  modal("", `
-    <span class="header">These are the profile pages!</span>
-    <span style="margin-top: 15px;display: block;">
-    <b>User badges:</b>
-    <ul>
-        <li><img src="badges/banned.png" style="vertical-align:middle;width:16px" /><br>Banned Account</li>
-        <li><img src="badges/user.png" style="vertical-align:middle;width:16px" /><br>Average Account</li>
-        <li><img src="badges/verified.png" style="vertical-align:middle;width:16px" /><br>Verified Account</li>
-        <li><img src="badges/beta-tester.png" style="vertical-align:middle;width:16px" /><br>Beta-tester</li>
-        <li><img src="badges/administrator.png" style="vertical-align:middle;width:16px" /><br>Administrator</li>
-        <li><img src="badges/owner.png" style="vertical-align:middle;width:16px" /><br>Owner of RiverBox</li>
-    </ul>`)
+  modal("userbadges")
 }
 
-data.awards.split("&").splice(1).forEach(function(i){
-    document.getElementById("awards").insertAdjacentHTML("afterBegin", encodeAward(i.replace("1", "bronzemedal").replace("2", "silvermedal").replace("3", "goldmedal").replace("4", "bronzetrophy").replace("5", "silvertrophy").replace("6", "goldtrophy").replace("7", "diamondaward")));
-});
+// data.awards.split("&").splice(1).forEach(function(i){
+//     document.getElementById("awards").insertAdjacentHTML("afterBegin", encodeAward(i.replace("1", "bronzemedal").replace("2", "silvermedal").replace("3", "goldmedal").replace("4", "bronzetrophy").replace("5", "silvertrophy").replace("6", "goldtrophy").replace("7", "diamondaward")));
+// });
 document.getElementById("pfp").setAttribute("src", data.pfp);
 document.getElementById("usernameheader").innerText = data.username;
 document.getElementById("bio").innerText = data.bio;
 document.getElementById("role").setAttribute("src", data.role);
+document.getElementById("recommend").setAttribute("onclick", `recommendUser1('${page.toLowerCase()}');`);
 document.getElementById("username").innerText = data.username;
 document.getElementById("status").innerText = data.status;
 document.getElementById("statushex").style.backgroundColor = hexes[data.statushex].main;
@@ -103,12 +115,16 @@ $("#linkssection").show("fade");
 }
 
 if (accowner) {
-  document.getElementById("editProfileControls").outerHTML = `<br><br><b>Manage profile</b><br><span class="link" onclick="modal('editbio')">Edit biography</span><br><span class="link" onclick="modal('editprofilepic')">Edit avatar</span><br><span class="link" onclick="modal('editbanner')">Edit banner</span><br><span class="link" onclick="selColModal()">Edit status</span><br><select id="cbmoptions" onchange="dispatchcbmoptions()"><option id="disabledcbm" value="disablecbm('` + data.banner + `')">Disable cinematic mode</option><option value="cinematicbannermode('` + data.banner + `', true)" id="enabledcbm1">Enable cinematic mode</option><option value="cinematicbannermode('` + data.banner + `', false)" id="enabledcbm2">Enable repeated cinematic mode</option></select><br><button class="highlightedButton" onclick="updatecbm()">Update banner options</button>`;
+  document.getElementById("editProfileControls").outerHTML = `<br><br><b>Manage profile</b><br><span class="link" onclick="modal('editbio')">Edit biography</span><br><span class="link" onclick="modal('editprofilepic')">Edit avatar</span><br><span class="link" onclick="modal('editbanner')">Edit banner</span><br><span class="link" onclick="selColModal()">Edit status</span><br><select id="cbmoptions" onchange="dispatchcbmoptions()"><option id="disabledcbm" value="disablecbm('` + data.banner + `');cbmmode = 'disabled'">Disable cinematic mode</option><option value="cinematicbannermode('` + data.banner + `', true);cbmmode = 'full'" id="enabledcbm1">Enable cinematic mode</option><option value="cinematicbannermode('` + data.banner + `', false);cbmmode = 'repeated'" id="enabledcbm2">Enable repeated cinematic mode</option></select><br><button class="highlightedButton" onclick="updatecbm()">Update CBM options</button><br>`;
   if (data.cbmfit) {
     document.getElementById("enabledcbm1").setAttribute("selected", "");
   }else{
     document.getElementById("enabledcbm2").setAttribute("selected", "");
   }
+}
+
+if (state.session.admin == 'true') {
+  document.getElementById("adminProfileControls").outerHTML = `<br><b>Administration</b><br><button onclick="modal('banuser')">Ban Fetched User</button><br><button onclick="viewUserPage(lastfetcheduser)">Refresh Fetched User</button><br><button onclick="modal('verifyuser')">Verify Fetched User</button>`;
 }
 
 if (data.posts == "&") {
@@ -120,7 +136,7 @@ posts.shift();
 for (let i = posts.length - 1;i > -1;i--) {
     fetch("https://riverbox-api.lankybox02.repl.co/getpost/" + posts[i])
         .then(response => response.json())
-        .then(data => encodeProfilePost(data, i))
+        .then(data => encodeProfilePost(data, i, posts[i]))
     }
 }
 
@@ -129,26 +145,7 @@ dispatchDocumentTitle(data.username);
 });
 }
 
-function editBio(lastBioEntered) {
-  postData('https://riverbox-api.lankybox02.repl.co/bio', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "bio": "` + lastBioEntered + `"}`))
-  .then(data => {
-      window.location.reload();
-  });
-}
-
-function setProfileMedia(link, pfporbanner) {
-  if (link.startsWith("http") && link.includes("://") && link.includes(".") && /(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(link) && link.length > 19) {
-    postData('https://riverbox-api.lankybox02.repl.co/' + pfporbanner, JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "media": "` + link + `"}`))
-    .then(data => {
-        window.location.reload();
-    });
-  }else{
-    modal("", "The link you have provided is either invalid or not an image.");
-  }
-}
-
-function encodeProfilePost(data, id) { 
-
+function encodeProfilePost(data, id, userpostid) { 
 let b;
 b = "";
 if (data.replies[0] != null) {
@@ -158,11 +155,16 @@ if (data.replies[0] != null) {
 </div><br>`
 }
 
+tooManyRepliesModal = "replyModal(";
+if (Object.keys(data.replies).length > 5) {
+  tooManyRepliesModal = "modal('repliesoverloadalert', ";
+}
+
 if (data.author.toLowerCase() == lastfetcheduser.toLowerCase()) {
 if (data.content == "<span class='moderated-post-text'>(This post was moderated)</span>") {
 document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><br><div class="post">` + data.content + `</div>`)
 }else{
-document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><div class="post">` + atob(data.content) + `<img src="` + data.attchmnt + `" width="450px" /><br><div style="float: right;color: var(--secondaryfont);">` + moment(data.timestamp) + `</div></div><br>${b}`)
+document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><div class="post">` + atob(data.content) + `<br><img src="` + data.attchmnt + `" width="450px" /><br><span onclick="${tooManyRepliesModal}${userpostid})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="reportModal(${userpostid})" class="socialButton" ` + loggedSocial() + `>Report</span><div style="float: right;display:inline-block;color: var(--secondaryfont);">` + moment(data.timestamp) + `</div></div><br>${b}`)
 }
 }
 }
@@ -195,7 +197,8 @@ function dispatchcbmoptions() {
 }
 
 function updatecbm() {
-  postData('https://riverbox-api.lankybox02.repl.co/cbm', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session"), cbm:document.getElementById("cbmoptions").value})
+  loadFull();
+  postData('https://riverbox-api.lankybox02.repl.co/cbm', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session"), cbm:cbmmode})
   .then(data => {
     window.location.reload();
   });
@@ -227,4 +230,32 @@ function setStatus(colorName, statusName) {
   }else{
     modal("", "You can't set an empty status!");
   }
+}
+
+function sendMessageToUser(sendto, message) {
+      postData('https://riverbox-api.lankybox02.repl.co/message', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "messagereceiver": "` + sendto + `", "message": "` + message + `"}`))
+  .then(data => {
+      viewUserPage(lastfetcheduser);
+  });
+}
+
+function ban(user, reason) {
+  loadFull();
+  postData('https://riverbox-api.lankybox02.repl.co/ban', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "usertobebanned": "` + user + `", "reason": "` + reason + `"}`))
+  .then(data => {
+      window.location.reload();
+  });
+}
+
+function getverifiedrequest() {
+  report("-!", localStorage.getItem("username"), true);
+  modal("", "Successfully submitted request.");
+}
+
+function verifyUser() {
+  loadFull();
+  postData('https://riverbox-api.lankybox02.repl.co/verify', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "usertobeverified": "` + lastfetcheduser + `"}`))
+  .then(data => {
+      window.location.reload();
+  });
 }

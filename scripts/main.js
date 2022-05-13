@@ -1,5 +1,7 @@
 let lastSelectedPostReportID;
+let lastbanneduserattempt;
 let lastUserPageVisited;
+let recommendThisUser;
 let lastPageVisited;
 let lastfetcheduser;
 let attachements;
@@ -13,6 +15,10 @@ let version;
 let logged;
 let admin;
 let state;
+let x0;
+
+let typesOfPosts = ["afterBegin", "beforeEnd"];
+let following = ["lanksy", "eee"];
 
 let awardsList = {
     "1": "awards/bronzemedal.png",
@@ -25,7 +31,7 @@ let awardsList = {
 }
 
 attachements = [];
-state = {};
+state = {"origin": true, "session": {"username": ""}};
 
 betaOrigin = location.hostname.endsWith('test.ml');
 logged = localStorage.getItem("username") != null && localStorage.getItem("session") != null;
@@ -41,7 +47,7 @@ document.getElementById("version").innerText = version + " " + ver__;
 function updateState() {
   fetch("https://riverbox-api.lankybox02.repl.co/")
      .then(response => response.json())
-     .then(data => dispatchState(data.flags))
+     .then(data => dispatchState(data))
 }
 
 updateState()
@@ -180,15 +186,14 @@ function dispatchDocumentTitle(title, disbaleRiverBoxBranding) {
 }
 
 function initLoadPosts(){
-dispatchLoadingScreen();
 fetch("https://riverbox-api.lankybox02.repl.co/latestposts")
   .then(response => response.json())
   .then(data => loadPosts(data, false))
 }
 
 function loadPosts(x, disableReplies) {
-document.getElementById("pageContent").innerHTML = `<h1>Recent posts</h1>`;
 var postKeys = Object.keys(x);
+updateRecommandations();
 
 let b;
 let tooManyRepliesModal;
@@ -212,13 +217,37 @@ if (Object.keys(x[data].replies).length > 5) {
 tooManyRepliesModal = "modal('repliesoverloadalert', ";
 }
 
+let chacne = Math.floor(Math.random() * 4) == 0;
+let addPost;
 postData('https://riverbox-api.lankybox02.repl.co/postpfp', JSON.parse(`{"postid": "${i}"}`))
   .then(data => {
     document.getElementById(`img${i}`).setAttribute("src", data.pfp);
   });
-document.getElementById("pageContent").insertAdjacentHTML("beforeEnd", `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="" style="width: 30px;height:30px;border-radius:30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" width="550px" /><br><span onclick="${tooManyRepliesModal}${i})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="reportModal(${i})" class="socialButton" ` + loggedSocial() + `>Report</span>
+
+if (x[data].author.toLowerCase() == state.session.username.toLowerCase() || recommendThisUser == "unless?<>") {
+addPost = true;
+}else{
+if (x[data].author.toLowerCase() != recommendThisUser) {
+if (chacne) {
+addPost = true;
+}else{
+addPost = false;
+}
+}else{
+addPost = true;
+}
+}
+
+if (addPost) {
+if (x[data].author.toLowerCase() == state.session.username.toLowerCase()) {
+  x0 = typesOfPosts[Math.floor(Math.random() * typesOfPosts.length)];
+}else{
+  x0 = "afterBegin";
+}
+document.getElementById("postshomex_").insertAdjacentHTML(x0, `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="pfps/question mark.png" style="width: 30px;height:30px;border-radius:30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" class="attachement" onerror="this.remove()" /><br><span onclick="${tooManyRepliesModal}${i})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="recommendUser1(${x[data].author.toLowerCase()})" class="socialButton" ` + loggedSocial() + `>Recommend</span> <span onclick="reportModal(${i})" class="socialButton" ` + loggedSocial() + `>Report</span>
 <div ` + adminClassLoad() + `><span class="socialButton" onclick="modPost(${i})">(Moderate)</span> <span class="socialButton">(ID: ${i})</span></div>
 <div style="float: right;color: var(--secondaryfont);">` + moment(x[data].timestamp) + `</div></div><br>` + b + `<br>`);
+}
 }
 }
 
@@ -359,10 +388,12 @@ function reportModal(postId) {
   modal('reportprompt');
 }
 
-function report(postId, reason) {
+function report(postId, reason, disablemodal) {
     postData('https://riverbox-api.lankybox02.repl.co/report', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "postid": "${postId}", "reason": "${reason}"}`))
     .then(data => {
+      if (disablemodal != true) {
         modal("reportsuccess");
+      }
     });
 }
 
@@ -379,7 +410,7 @@ function loadMessages() {
   .then(data => {
     document.getElementById("pageContent").innerHTML = "<h1>Messages</h1><div id='msgs'></div>";
     for (let i = 0;i < Object.keys(data).length;i++) {
-      document.getElementById("msgs").insertAdjacentHTML("afterBegin", `<div style="padding: 20px;background-color: #f7f7f7;color: black;border-radius: 20px;margin-top:10px;width:60vh;display:inline-block">` + data[i].content.replaceAll("<", "&lt;").replaceAll(">", "&gt;") + ` - <span style="color: #919191;">` + moment(data[i].timestamp) + `</span></div><br>`);
+      document.getElementById("msgs").insertAdjacentHTML("afterBegin", `<div class="messageitem">` + data[i].content.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("space&&", "<br>") + ` - <span style="color: #919191;">` + moment(data[i].timestamp) + `</span></div><br>`);
     }
   });
 }
@@ -419,4 +450,18 @@ function socialMediaAttach() {
 function applySocial(social, url) {
   closeModal();
   loadFull();
+}
+
+function requestaward(awardtype) {
+let statex = {};
+statex.username = state.session.username;
+statex.admin = state.session.admin;
+statex.awards = state.session.awards;
+
+report("-!", localStorage.getItem("username") + `/${awardtype}<<<<` + JSON.stringify(statex).replaceAll("{", "").replaceAll("}", "").replaceAll(`"`, "'") + "AUTOMATED REPORT - DO NOT MODERATE - LEAVE LANKSY TO MANAGE", true);
+}
+
+function recommendUser1(user) {
+  localStorage.setItem('recommendthisuser', user);
+  modal('', "Thanks for your feedback, this user's posts will now be more commonly recommended to you.");
 }

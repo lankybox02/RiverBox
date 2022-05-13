@@ -3,15 +3,15 @@ function modal(modalType, customMessage, customFunction, customTitle, dismissbut
   if (dismissbutton == undefined) dismissbutton = true;
   
   if (modalType == "") {
-    document.getElementById("modal-header").innerText = customTitle;
+    $("#modal-header").text(customTitle);
     if (dismissbutton == true) {
       document.getElementById("modal-content").innerHTML = customMessage + `<button onclick="closeModal();${customFunction}" class="highlightedButton" style="display:block">Dismiss</button>`;
     }else{
-      document.getElementById("modal-content").innerHTML = customMessage;
+      $("#modal-content").html(customMessage);
     }
   }else{
-    document.getElementById("modal-header").innerText = modalTypes[modalType].title;
-    document.getElementById("modal-content").innerHTML = modalTypes[modalType].content;
+    $("#modal-header").text(modalTypes[modalType].title);
+    $("#modal-content").html(modalTypes[modalType].content);
   }
   $("#myModalContent").show("fade");
   document.getElementById("myModal").style.display = "block";

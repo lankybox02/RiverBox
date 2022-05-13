@@ -1,7 +1,7 @@
 let pageTypes = {
   "home": {
     "title": "Home",
-    "content": ``,
+    "content": `<h1>Feed</h1><div id="postshomex_"></div><button id="buttonloadmore" onclick="initLoadPosts()" class="highlightedButton">Load more posts....</button><br><br><br><br>`,
     "script": `initLoadPosts()`,
     "accountonly": false,
     "padding": true,
@@ -44,9 +44,7 @@ Imagine a social media platform where people are kind and supportive of one anot
 <br><br>
 With RiverBox, you'll have a safe, friendly place to share your thoughts and connect with others who share your interests and values. We emphasize kindness and support, so you can feel confident sharing anything!
 <br><hr><br>
-RiverBox is a social media platform for everyone that emphasizes kindness and support. We are a safe, friendly place where people can share their thoughts and experiences without fear of judgment. Our goal is to provide a platform for people to connect and build relationships with others who share their interests and values.
-<br><br>
-We believe that everyone deserves to be safe and supported online, and we are committed to making the internet a more inclusive space.
+RiverBox is a social media platform for everyone that emphasizes kindness and support. We believe that everyone deserves to be safe and supported online, and we are committed to making the internet a more inclusive space.
 <br><br>
 We strive to create a safe and welcoming online community for everyone. We are a diverse and inclusive community that welcomes people of all ages, races, ethnicities, religions, abilities, sexual orientations, and gender identities.
 <br>
@@ -102,7 +100,14 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
   "settings": {
     "title": "Settings",
     "content": `<h1>Settings</h1>
-<span class="header">Theme</span><br><select onchange="changeTheme()" id="theme"><option value="dark">Dark Mode</option><option value="light" id="light">Light Mode</option></select><br><br><span class="header">Account</span><br><button onclick="logOut()">Log Out</button><br><button onclick="modal('changesession')">Change Password</button>`,
+<div class="contentbox" style="width: 40%;margin: auto;">
+<span class="header">Theme</span><br><select onchange="changeTheme()" id="theme"><option value="dark">Dark Mode</option><option value="light" id="light">Light Mode</option></select>
+</div>
+<br>
+<div class="contentbox" style="width: 40%;margin: auto;">
+<span class="header">Account</span>
+<br><button onclick="modal('changesession')">Change Password</button>
+</div>`,
     "script": `if(localStorage.getItem("theme") == "light"){document.getElementById("light").setAttribute("selected", "")}`,
     "accountonly": true,
     "padding": true,
@@ -152,15 +157,19 @@ A username can only be between 3 to 20 characters long
     "content": `<div style="text-align: left !important;padding: 0;"><img src="" style="object-fit: cover;width: 100%;height: 30vh;object-position: 50% 50%;opacity: 0.8" id="banner"><br>
 
 <div style="display:flex">
-<div style="margin-left: 20%;margin-top:-75px;opacity: 0.99;background-color: var(--primary);padding: 15px;border-radius: 10px;display: inline-block;">
+<div class="contentbox" style="margin-left:20% !important;">
     <img src="" style="width:100px;height:100px;border-radius:150px;box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);vertical-align:middle" id="pfp">
-    <span class="header" style="margin-left:10px;font-size: 40px;" id="usernameheader"></span> <img src="" id="role" style="width:25px;margin-left:5px;filter: drop-shadow(2px 4px 6px black);" />
+    <span class="header" style="margin-left:10px;font-size: 40px;" id="usernameheader"></span> <img src="" id="role" class="profilebadge" onclick="modal('userbadges')" />
 <br>
 <div style="margin-top: -37px;margin-left: 115px;"><div style="display: inline-block;padding: 9px;border-radius: 20px;vertical-align: middle;" id="statushex"></div>
 <span id="status">Fetching status...</span>
 </div>
+<div style="margin-left: 115px;">
+  <button class="highlightedButton" onclick="modal('sendmsg');">Send a message...</button> 
+  <button class="highlightedButton" onclick="recommendUser1();" id="recommend">Recommend</button>
 </div>
-<div style="margin-left: 1%;margin-top:-75px;opacity: 0.99;padding-bottom:7px;background-color: var(--primary);padding: 15px;border-radius: 10px;display: inline-block;display:none" id="linkssection">
+</div>
+<div class="contentbox" id="linkssection" style="display:none">
     <b>Links</b>
 <ul style="padding:0">
 <li>YouTube</li>
@@ -171,7 +180,7 @@ A username can only be between 3 to 20 characters long
 </div>
 
 <div style="display:flex;margin-top: 20px;margin-left: 20%;">
-<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>Biography</b><br><span id="bio"></span><br><br><b>Statistics</b><br>Joined <span id="timestamp"></span><br><br><b>Awards</b><br><span id="awards"></span><div id="editProfileControls"></div></div>
+<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>Biography</b><br><span id="bio"></span><br><br><b>Statistics</b><br>Joined <span id="timestamp"></span><div id="editProfileControls"></div><div id="adminProfileControls"></div></div>
 <div style="padding: 10px 10px 5px 5px;" id="posts"><span class="header" style="margin-bottom: 20px;"><span id="username"></span>'s Posts</span>
 <br>
 <div id="posts"></div>
@@ -546,5 +555,75 @@ let modalTypes = {
     <button class="highlightedButton" onclick="window.location.href = '/'">Nevermind...</button>
     </div>
 </div>`
+  },
+  "sendmsg": {
+    "title": "Send a message!",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+    <span class="header">Would you like to send a message?</span>
+    <span style="margin-top: 15px;display: block;">
+    <textarea id="msg" placeholder="Message content..."></textarea>
+    </span>
+    <button class="highlightedButton" onclick="sendMessageToUser(lastfetcheduser, document.getElementById('msg').value);closeModal()">Create!</button> 
+    <button onclick="closeModal()">Nevermind</button>
+    </div>
+</div>`
+  },
+  "banuser": {
+    "title": "Send a message!",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+    <span class="header">Would you like to send a message?</span>
+    <span style="margin-top: 15px;display: block;">
+    <textarea id="banreason" placeholder="Ban reasoning..."></textarea>
+    </span>
+    <button class="highlightedButton" onclick="ban(lastfetcheduser, document.getElementById('banreason').value);closeModal()">Ban!</button> 
+    <button onclick="closeModal()">Nah, leave it!</button>
+    </div>
+</div>`
+  },
+  "userbadges": {
+    "title": "What are user badges?",
+    "content": `<span class="header">What are user badges?</span>
+    <span style="margin-top: 15px;display: block;">
+    The user badges are small icons next to usernames that define someone's role on RiverBox.
+    <br><br>
+    <b>User badges:</b>
+    <ul>
+        <li><img src="badges/banned.png" style="vertical-align:middle;width:16px" /><br>Banned Account</li>
+        <li><img src="badges/user.png" style="vertical-align:middle;width:16px" /><br>Average Account</li>
+        <li><img src="badges/verified.png" style="vertical-align:middle;width:16px" /><br>Verified Account</li>
+        <li><img src="badges/beta-tester.png" style="vertical-align:middle;width:16px" /><br>Developement Team</li>
+        <li><img src="badges/administrator.png" style="vertical-align:middle;width:16px" /><br>Administrator</li>
+        <li><img src="badges/owner.png" style="vertical-align:middle;width:16px" /><br>Owner of RiverBox</li>
+    </ul>
+    <button class="highlightedButton" onclick="closeModal()">Alright!</button> <button onclick="modal('getberified')">Get verified</button>`
+  },
+  "getberified": {
+    "title": "Do you want to get verified?",
+    "content": `<span class="header">Do you want to get verified?</span>
+    <span style="margin-top: 15px;display: block;">
+So, you would like to get verified on RiverBox? Nice, let's guide you through the requirements.
+<br><br><b>Verification Requirements</b><br>
+- You must have at least 5 posts on your RiverBox profile<br>
+- You must have a unique username, profile picture, banner, and biography<br>
+- Your account must represent the real creator/brand you’re claiming to be<br>
+- You must be active and post frequently on RiverBox (at least every week)<br>
+- Your RiverBox account must be created at least 7 days ago
+    </span>
+<br>
+    <button class="highlightedButton" onclick="getverifiedrequest()">Submit!</button> 
+    <button onclick="closeModal()">Oh, guess not :(</button> 
+`
+  },
+  "verifyuser": {
+    "title": "Would you like to verify this user?",
+    "content": `<span class="header">Would you like to verify this user?</span>
+    <span style="margin-top: 15px;display: block;">
+This action is completely undo-able.
+<br><br>
+    <button class="highlightedButton" onclick="verifyUser()">Yes, verify, verify, verify!</button>
+    <button onclick="closeModal()">Nevermind...</button> 
+`
   }
 }

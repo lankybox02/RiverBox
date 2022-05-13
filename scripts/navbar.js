@@ -2,7 +2,7 @@ function insertNav(username) {
 let adminPageLink;
 if (admin == 'true') {
   // document.getElementById("navbar").style.backgroundColor = "#edc618";
-  adminPageLink = `<span onclick="window.location.href = 'tickets.html'">Tickets</span>`;
+  adminPageLink = `<span onclick="window.location.href = 'admin'">Tickets</span>`;
 }else{
   adminPageLink = "";
 }
@@ -15,7 +15,7 @@ accountControls = `
     <div class="dropdown">
       <span onclick="viewUserPage('${username}')">Profile</span>
       <span onclick="dispatchPageLoad('settings')">Settings</span>
-      <span onclick="dispatchPageLoad('messages')">DMs</span>
+      <span onclick="dispatchPageLoad('messages')">Messages</span>
       <span onclick="logOut()">Log out</span>
     </div>
 </details>
@@ -25,7 +25,7 @@ if (username == "$") {
     loggedOut = true;
     accountControls = `
 <div id="accountControls">
-<span onclick="modal('adminlogin')">Log In <span style="background-color:#19d916;padding:5px 10px 5px 10px;border-radius:3px">Beta</span></span>
+<span onclick="modal('adminlogin')">Log In</span>
 <span onclick="dispatchPageLoad('signup')">Sign Up</span>
 </div>
 `;
@@ -54,7 +54,7 @@ accountControls = `
 
 document.getElementById("navbar").innerHTML = `
 <div class="homeNavButtons" onclick="document.location.href = '/'">
-<img src="assets/logo.png" id="adminLogo">
+<img src="/assets/logo.png" id="adminLogo">
 RiverBox
 </div>
 ${accountControls}

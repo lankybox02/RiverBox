@@ -1,1 +1,1 @@
-let ver__ = "Beta 1.3";
+let ver__ = "Beta 1.4";

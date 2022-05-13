@@ -22,20 +22,27 @@ body {
   color: var(--font);
   margin: 0;
   margin-top: 50px;
+  background-attachment: fixed;
 }
 
 #navbar {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    background-color: var(--primary);
-    box-shadow: 0 0 3px rgb(255 255 255 / 25%);
-    width: 100%;
-    height: 30px;
-    padding: 10px;
-    font-size: 25px;
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background-color: var(--primary);
+  box-shadow: 4px 4px 8px rgb(255 255 255 / 25%);
+  width: 100%;
+  height: 30px;
+  padding: 10px;
+  font-size: 25px;
+}
+
+.label {
+  background-color:#19d916;
+  padding:5px 10px 5px 10px;
+  border-radius:3px;
 }
 
 .homeNavButtons {
@@ -117,6 +124,19 @@ textarea {
   color: #333333;
   padding: 10px 12px;
   resize: none;
+  transition: 0.1s;
+}
+
+input, select {
+  transition: 0.1s;
+  background-color: #f5f5f5;
+  border: 0;
+  border-radius: 100px;
+  color: #333333;
+  padding: 10px 12px;
+  margin-top: 5px;
+  outline: none;
+  border: 2px solid grey;
 }
 
 button {
@@ -128,6 +148,7 @@ button {
   text-align: center;
   margin-top:5px;
   border: 2px solid grey;
+  transition: 0.1s;
 }
 
 .highlightedButton {
@@ -139,6 +160,11 @@ button {
 .disabledButton {
   cursor: not-allowed;
   color:grey
+}
+
+textarea:hover, input:hover, select:hover, button:hover, .post-button:hover, #version:hover {
+  transition: 0.1s;
+  opacity: 0.9;
 }
 
 .loader {
@@ -176,20 +202,9 @@ button {
   cursor: pointer;
 }
 
-input, select {
-  background-color: #f5f5f5;
-  border: 0;
-  border-radius: 100px;
-  color: #333333;
-  padding: 10px 12px;
-  margin-top: 5px;
-  outline: none;
-  border: 2px solid grey;
-}
-
 .post-button {
   align-items: center;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.8);
   color: black;
   border-radius: 100px;
   width: 10px;
@@ -203,6 +218,17 @@ input, select {
   right: 30px;
   cursor: pointer;
   box-shadow: 1px 1px 100px #363636;
+}
+
+#version {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  color: black;
+  border-radius: 200px;
+  font-size: 20px;
 }
 
 .modal {
@@ -260,19 +286,15 @@ input, select {
   border: 3px solid var(--border);
 }
 
-a {
-  color: white;
+.attachement {
+  border-radius: 25px;
+  width: 525px;
+  margin-bottom: 7px;
+  box-shadow: 2px 2px 12px black;
 }
 
-#version {
-  position: fixed;
-  bottom: 30px;
-  left: 30px;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  color: black;
-  border-radius: 200px;
-  font-size: 20px;
+a {
+  color: white;
 }
 
 .moderated-post-text {
@@ -324,4 +346,30 @@ li {
 
 li:hover {
   font-size: 20px;
+}
+
+.contentbox {
+  margin-left: 1%;
+  margin-top: -75px;
+  opacity: 0.99;
+  background-color: var(--primary);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.profilebadge {
+  width: 25px;
+  margin-left: 5px;
+  filter: drop-shadow(2px 4px 6px black);
+  cursor: pointer;
+}
+
+.messageitem {
+  padding: 20px;
+  background-color: #f7f7f7;
+  color: black;
+  border-radius: 20px;
+  margin-top: 10px;
+  width: 60vh;
+  display: inline-block;
 }
