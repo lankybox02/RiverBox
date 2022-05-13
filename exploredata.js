@@ -1,4 +1,4 @@
-let randomUsersDB = ["touchcreator", "zu-", "lanksy", "willy", "pkmnq", "michigan", "punpun", "pkmnq_new_acc", "ratio", "humen", "misty", "daily_meme"]; // users that have verified content... well , mostly LOL
+let randomUsersDB = ["touchcreator", "zu-", "lanksy", "willy", "pkmnq", "misty", "daily_meme"];
 
 function updateRecommandations() {
   if (localStorage.getItem("recommendthisuser") == null) {
