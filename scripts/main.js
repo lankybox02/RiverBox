@@ -1,5 +1,7 @@
+let apiPath = "https://api.riverbox.ml/";
 let lastSelectedPostReportID;
 let lastbanneduserattempt;
+let lastcommunityfetched;
 let lastUserPageVisited;
 let recommendThisUser;
 let lastPageVisited;
@@ -45,7 +47,7 @@ if (betaOrigin) {
 document.getElementById("version").innerText = version + " " + ver__;
 
 function updateState() {
-  fetch("https://riverbox-api.lankybox02.repl.co/")
+  fetch(apiPath)
      .then(response => response.json())
      .then(data => dispatchState(data))
 }
@@ -66,7 +68,7 @@ if (ipExpActivated && localStorage.getItem("ip") == null) {
 
 if (logged) {
 dispatchLoadingScreen();
-fetch("https://riverbox-api.lankybox02.repl.co/signin/" + localStorage.getItem("username") + "/" + localStorage.getItem("session"))
+fetch(apiPath + "signin/" + localStorage.getItem("username") + "/" + localStorage.getItem("session"))
    .then(response => response.json())
    .then(data => computeLoginData(data))
 }else{
@@ -119,7 +121,6 @@ document.getElementById("pageContent").style.paddingTop = "80px";
 
 function dispatchPageLoad(pageType, doNotSetTitle) {
   updateState();
-  updateTheme();
   dispatchLoadingScreen();
   lastPageVisited = pageType;
   if (pageTypes[pageType] != null) {
@@ -169,12 +170,6 @@ function dispatchPageLoad(pageType, doNotSetTitle) {
       }
     }
   }, 6000);
-  if (state.session != undefined) {
-    if (state.session.username == 'lanksy' && pageType != 'userpage') {
-      $("body").css("background-image", "url(https://u.cubeupload.com/lankysback/Dzh3rf.jpg)");
-      $("body").css("background-attachment", "fixed");
-    }
-  }
 }
 
 function dispatchDocumentTitle(title, disbaleRiverBoxBranding) {
@@ -186,7 +181,7 @@ function dispatchDocumentTitle(title, disbaleRiverBoxBranding) {
 }
 
 function initLoadPosts(){
-fetch("https://riverbox-api.lankybox02.repl.co/latestposts")
+fetch(apiPath + "latestposts")
   .then(response => response.json())
   .then(data => loadPosts(data, false))
 }
@@ -219,10 +214,6 @@ tooManyRepliesModal = "modal('repliesoverloadalert', ";
 
 let chacne = Math.floor(Math.random() * 4) == 0;
 let addPost;
-postData('https://riverbox-api.lankybox02.repl.co/postpfp', JSON.parse(`{"postid": "${i}"}`))
-  .then(data => {
-    document.getElementById(`img${i}`).setAttribute("src", data.pfp);
-  });
 
 if (x[data].author.toLowerCase() == state.session.username.toLowerCase() || recommendThisUser == "unless?<>") {
 addPost = true;
@@ -239,14 +230,14 @@ addPost = true;
 }
 
 if (addPost) {
-if (x[data].author.toLowerCase() == state.session.username.toLowerCase()) {
-  x0 = typesOfPosts[Math.floor(Math.random() * typesOfPosts.length)];
-}else{
-  x0 = "afterBegin";
-}
+x0 = typesOfPosts[Math.floor(Math.random() * typesOfPosts.length)];
 document.getElementById("postshomex_").insertAdjacentHTML(x0, `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="pfps/question mark.png" style="width: 30px;height:30px;border-radius:30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" class="attachement" onerror="this.remove()" /><br><span onclick="${tooManyRepliesModal}${i})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="recommendUser1(${x[data].author.toLowerCase()})" class="socialButton" ` + loggedSocial() + `>Recommend</span> <span onclick="reportModal(${i})" class="socialButton" ` + loggedSocial() + `>Report</span>
 <div ` + adminClassLoad() + `><span class="socialButton" onclick="modPost(${i})">(Moderate)</span> <span class="socialButton">(ID: ${i})</span></div>
 <div style="float: right;color: var(--secondaryfont);">` + moment(x[data].timestamp) + `</div></div><br>` + b + `<br>`);
+postData(apiPath + 'postpfp', JSON.parse(`{"postid": "${i}"}`))
+  .then(data => {
+    document.getElementById(`img${i}`).setAttribute("src", data.pfp);
+  });
 }
 }
 }
@@ -302,7 +293,7 @@ const signUp = () => {
     document.getElementById("sessionInput").value = "";
     modal("", "Invalid username or password!")
   }else{
-postData('https://riverbox-api.lankybox02.repl.co/signup', JSON.parse(`{"username": "${usernameInput}", "session": "${sessionInput}"}`))
+postData(apiPath + 'signup', JSON.parse(`{"username": "${usernameInput}", "session": "${sessionInput}"}`))
   .then(data => {
     setTimeout(function(){
       if (data.success == 'false') {
@@ -345,7 +336,7 @@ function sendPost(postContent) {
     loadFull();
     closeModal();
     postContent = postContent.replaceAll(/(?:\r\n|\r|\n)/gi, "\n");
-    postData('https://riverbox-api.lankybox02.repl.co/post', JSON.parse(`{"post": "${postContent}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "attchmnt": "` + attachements.toString() + `"}`))
+    postData(apiPath + 'post', JSON.parse(`{"post": "${postContent}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "attchmnt": "` + attachements.toString() + `"}`))
       .then(data => {
         attachements = [];
         window.location.reload();
@@ -372,7 +363,7 @@ function sendPost(postContent) {
 function reply(postId, reply) {
   loadFull();
   closeModal();
-  postData('https://riverbox-api.lankybox02.repl.co/reply', JSON.parse(`{"post": "${postId}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "reply": "${reply}"}`))
+  postData(apiPath + 'reply', JSON.parse(`{"post": "${postId}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "reply": "${reply}"}`))
   .then(data => {
       window.location.reload();
   });
@@ -389,7 +380,7 @@ function reportModal(postId) {
 }
 
 function report(postId, reason, disablemodal) {
-    postData('https://riverbox-api.lankybox02.repl.co/report', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "postid": "${postId}", "reason": "${reason}"}`))
+    postData(apiPath + 'report', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "postid": "${postId}", "reason": "${reason}"}`))
     .then(data => {
       if (disablemodal != true) {
         modal("reportsuccess");
@@ -399,14 +390,14 @@ function report(postId, reason, disablemodal) {
 
 function changeSession(newSession) {
 loadFull();
-postData('https://riverbox-api.lankybox02.repl.co/changesession', JSON.parse(`{"newsession": "${newSession}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `"}`))
+postData(apiPath + 'changesession', JSON.parse(`{"newsession": "${newSession}", "username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `"}`))
   .then(data => {
     window.location.reload();
   });
 }
 
 function loadMessages() {
-  postData('https://riverbox-api.lankybox02.repl.co/messages', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session")})
+  postData(apiPath + 'messages', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session")})
   .then(data => {
     document.getElementById("pageContent").innerHTML = "<h1>Messages</h1><div id='msgs'></div>";
     for (let i = 0;i < Object.keys(data).length;i++) {
@@ -416,13 +407,13 @@ function loadMessages() {
 }
 
 function dismissMsg() {
-  postData('https://riverbox-api.lankybox02.repl.co/messages', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session")})
+  postData(apiPath + 'messages', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session")})
   .then(data => {
   });
 }
 
 setInterval(function(){
-fetch("https://riverbox-api.lankybox02.repl.co/signin/" + localStorage.getItem("username") + "/" + localStorage.getItem("session"))
+fetch(apiPath + "signin/" + localStorage.getItem("username") + "/" + localStorage.getItem("session"))
    .then(response => response.json())
    .then(data => newmsgcheck(data, true))
 }, 10000)

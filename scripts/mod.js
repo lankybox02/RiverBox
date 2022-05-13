@@ -10,7 +10,7 @@ if (admin) {
 if (url.searchParams.get("post") != null) {
   document.getElementsByClassName("banner")[0].style.display = "block";
   document.getElementsByClassName("banner")[0].innerText = "Post loaded from ticket.";
-  fetch("https://riverbox-api.lankybox02.repl.co/getpost/" + url.searchParams.get("post"))
+  fetch(apiPath + "getpost/" + url.searchParams.get("post"))
     .then(response => response.json())
     .then(data => adminLoadPost(data))
   }

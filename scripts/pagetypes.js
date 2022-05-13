@@ -91,7 +91,7 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
   },
   "explore": {
     "title": "Explore",
-    "content": `<h1>Explore</h1><div style="text-align:left" id="tiles"><span class="header">Users to watch</span><br><div style="height: 90px;overflow-x: hidden;" id="list"></div></div>`,
+    "content": `<h1>Explore</h1><span class="header">Search Tools</span><br><input placeholder="Insert a username..." id="usr"> <button class="highlightedButton" onclick="viewUserPage(document.getElementById('usr').value)">Load!</button><br><input placeholder="Insert a community ID..." id="com" value="1"> <button class="highlightedButton" onclick="viewCommunity(document.getElementById('com').value)">Load!</button><br><br><span class="header">Recommended</span><br><span>This section is still being worked on!</span>`,
     "script": `exploreLoad()`,
     "accountonly": false,
     "padding": true,
@@ -100,10 +100,6 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
   "settings": {
     "title": "Settings",
     "content": `<h1>Settings</h1>
-<div class="contentbox" style="width: 40%;margin: auto;">
-<span class="header">Theme</span><br><select onchange="changeTheme()" id="theme"><option value="dark">Dark Mode</option><option value="light" id="light">Light Mode</option></select>
-</div>
-<br>
 <div class="contentbox" style="width: 40%;margin: auto;">
 <span class="header">Account</span>
 <br><button onclick="modal('changesession')">Change Password</button>
@@ -165,8 +161,8 @@ A username can only be between 3 to 20 characters long
 <span id="status">Fetching status...</span>
 </div>
 <div style="margin-left: 115px;">
-  <button class="highlightedButton" onclick="modal('sendmsg');">Send a message...</button> 
-  <button class="highlightedButton" onclick="recommendUser1();" id="recommend">Recommend</button>
+  <button onclick="modal('sendmsg');">Send a message...</button> 
+  <button onclick="recommendUser1();" id="recommend">Recommend</button>
 </div>
 </div>
 <div class="contentbox" id="linkssection" style="display:none">
@@ -199,10 +195,11 @@ A username can only be between 3 to 20 characters long
 </div>
 
 <div style="display:flex;margin-top: 40px;margin-left: 20%;">
-<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>About</b><br><span id="about"></span><br><br><b>Statistics</b><br>Created <span id="timestamp"></span><br><br><b>Members</b><details><summary>Members List</summary><ul id="memberslist"></u></details><div id="editCommunityControls"></div></div>
-<div style="padding: 10px 10px 5px 5px;" id="posts"><span class="header" style="margin-bottom: 20px;">Latest Posts</span>
+<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>About</b><br><span id="about"></span><br><button class="highlightedButton" id="joinbutton">Join</button><br><br><b>Statistics</b><br>Created <span id="timestamp"></span><br><br><b>Members</b><details><summary>Members List</summary><div id="memberslist"></div></details><div id="editCommunityControls"></div></div>
+<div style="padding: 10px 10px 5px 5px;"><span class="header">Latest Posts</span>
 <br>
-<div id="posts">No posts are here.</div>
+<br>
+<div id="posts"></div>
 </div></div>`,
     "script": `// setTimeout(function(){modal('holdupadminbreakagemessage')}, 2000)`,
     "accountonly": false,
@@ -483,20 +480,22 @@ let modalTypes = {
     <br>
     <textarea id="communityInput" placeholder="Community description..."></textarea>
     </span>
-    <button class="highlightedButton" onclick="renameAboutCom(lastcomedit, document.getElementById('communityInput').value);closeModal()">Create!</button> 
+    <button class="highlightedButton" onclick="renameAboutCom(lastcomedit, document.getElementById('communityInput').value);closeModal()">Apply!</button> 
     <button onclick="closeModal()">Nevermind</button>
     </div>
 </div>`
   },
-  "comeditname": {
-    "title": "Change the community's subject!",
+  "bannereditxyz": {
+    "title": "What does this community look like?",
     "content": `<div style="display: flex;text-align:left;">
     <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
-    <span class="header">What is this community's new name?</span>
+    <span class="header">What does this community look like?</span>
     <span style="margin-top: 15px;display: block;">
-    <textarea id="communityInput" placeholder="Community name..."></textarea>
+    Please enter the link for the new community banner:
+    <br>
+    <textarea id="communityInput" placeholder="New banner link..."></textarea>
     </span>
-    <button class="highlightedButton" onclick="renameCom(lastcomedit, document.getElementById('communityInput').value);closeModal()">Create!</button> 
+    <button class="highlightedButton" onclick="newBannerCom(lastcomedit, document.getElementById('communityInput').value);closeModal()">Apply!</button> 
     <button onclick="closeModal()">Nevermind</button>
     </div>
 </div>`
@@ -624,6 +623,26 @@ This action is completely undo-able.
 <br><br>
     <button class="highlightedButton" onclick="verifyUser()">Yes, verify, verify, verify!</button>
     <button onclick="closeModal()">Nevermind...</button> 
+`
+  },
+  "lgbtq": {
+    "title": "Join the LGBTQ+ Community!",
+    "content": `<span class="header">Would you join the LGBTQ+ Community?</span>
+    <span style="margin-top: 15px;display: block;">
+Would you like to join the LGBTQ+ community on RiverBox?
+<br><br>
+    <button class="highlightedButton" onclick="viewCommunity('1');closeModal()">Lemme take a look at it</button>
+    <button onclick="closeModal()">Nah thanks</button> 
+`
+  },
+  "bblm": {
+    "title": "Join the BLM Community!",
+    "content": `<span class="header">Would you join the BLM Community?</span>
+    <span style="margin-top: 15px;display: block;">
+Would you like to join the BLM community on RiverBox?
+<br><br>
+    <button class="highlightedButton" onclick="viewCommunity('1');closeModal()">Lemme take a look at it</button>
+    <button onclick="closeModal()">Nah thanks</button> 
 `
   }
 }

@@ -3,7 +3,7 @@ let cbmmode;
 function setProfileMedia(link, pfporbanner) {
   loadFull();
   if (link.startsWith("http") && link.includes("://") && link.includes(".") && /(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(link) && link.length > 19) {
-    postData('https://riverbox-api.lankybox02.repl.co/' + pfporbanner, JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "media": "` + link + `"}`))
+    postData(apiPath + pfporbanner, JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "media": "` + link + `"}`))
     .then(data => {
         window.location.reload();
     });
@@ -14,7 +14,7 @@ function setProfileMedia(link, pfporbanner) {
 
 function editBio(lastBioEntered) {
   loadFull();
-  postData('https://riverbox-api.lankybox02.repl.co/bio', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "bio": "` + lastBioEntered + `"}`))
+  postData(apiPath + 'bio', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "bio": "` + lastBioEntered + `"}`))
   .then(data => {
       window.location.reload();
   });
@@ -71,7 +71,7 @@ function viewUserPage(page) {
   }
 
   lastfetcheduser = page;
-postData('https://riverbox-api.lankybox02.repl.co/getaccount', {"username": page})
+postData(apiPath + 'getaccount', {"username": page})
   .then(data => {
     if (data.error != null) {
       modal("", "Error loading this userpage!")
@@ -83,7 +83,6 @@ if (data.cbm) {
 }else{
   document.getElementById("banner").setAttribute("src", data.banner.replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
 }
-darkMode();
 if (localStorage.getItem("newtouserpages") == null) {
   localStorage.setItem("newtouserpages", false);
   modal("userbadges")
@@ -134,7 +133,7 @@ let posts = data.posts.split("&");
 posts.shift();
 
 for (let i = posts.length - 1;i > -1;i--) {
-    fetch("https://riverbox-api.lankybox02.repl.co/getpost/" + posts[i])
+    fetch(apiPath + "getpost/" + posts[i])
         .then(response => response.json())
         .then(data => encodeProfilePost(data, i, posts[i]))
     }
@@ -198,7 +197,7 @@ function dispatchcbmoptions() {
 
 function updatecbm() {
   loadFull();
-  postData('https://riverbox-api.lankybox02.repl.co/cbm', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session"), cbm:cbmmode})
+  postData(apiPath + 'cbm', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session"), cbm:cbmmode})
   .then(data => {
     window.location.reload();
   });
@@ -223,7 +222,7 @@ function setStatus(colorName, statusName) {
   if (statusName != "") {
     closeModal();
     loadFull();
-    postData('https://riverbox-api.lankybox02.repl.co/poststatus', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session"), "status": statusName, "statushex": colorName})
+    postData(apiPath + 'poststatus', {"username": localStorage.getItem("username"), "session": localStorage.getItem("session"), "status": statusName, "statushex": colorName})
   .then(data => {
     window.location.reload();
   });
@@ -233,7 +232,7 @@ function setStatus(colorName, statusName) {
 }
 
 function sendMessageToUser(sendto, message) {
-      postData('https://riverbox-api.lankybox02.repl.co/message', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "messagereceiver": "` + sendto + `", "message": "` + message + `"}`))
+      postData(apiPath + 'message', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "messagereceiver": "` + sendto + `", "message": "` + message + `"}`))
   .then(data => {
       viewUserPage(lastfetcheduser);
   });
@@ -241,7 +240,7 @@ function sendMessageToUser(sendto, message) {
 
 function ban(user, reason) {
   loadFull();
-  postData('https://riverbox-api.lankybox02.repl.co/ban', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "usertobebanned": "` + user + `", "reason": "` + reason + `"}`))
+  postData(apiPath + 'ban', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "usertobebanned": "` + user + `", "reason": "` + reason + `"}`))
   .then(data => {
       window.location.reload();
   });
@@ -254,7 +253,7 @@ function getverifiedrequest() {
 
 function verifyUser() {
   loadFull();
-  postData('https://riverbox-api.lankybox02.repl.co/verify', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "usertobeverified": "` + lastfetcheduser + `"}`))
+  postData(apiPath + 'verify', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "usertobeverified": "` + lastfetcheduser + `"}`))
   .then(data => {
       window.location.reload();
   });
