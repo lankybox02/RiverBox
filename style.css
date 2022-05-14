@@ -4,12 +4,16 @@
 
 :root {
   --background: #111a27;
-  --primary: rgba(34, 35, 48, 0.6);
+  --primary: rgba(34, 35, 48, 0.7);
+  --primarydarker: rgba(24, 25, 38, 0.9);
   --secondary: rgba(31, 41, 55, 1);
   --border: rgb(37 47 61);
   --font: white;
   --secondaryfont: lightgrey;
   --postfont: white;
+  --blue: #2dc9ff;
+  --lightblue: #62d7ff;
+  --borderblue:#1786ab;
 }
 
 body, html {
@@ -17,7 +21,7 @@ body, html {
 }
 
 body {
-  font-family: helvetica;
+  font-family: Helvetica, sans-serif;
   background-color: var(--background);
   color: var(--font);
   margin: 0;
@@ -33,11 +37,10 @@ body {
   left: 0;
   z-index: 1;
   background-color: var(--primary);
-  box-shadow: 4px 4px 8px rgb(255 255 255 / 25%);
   width: 100%;
-  height: 30px;
+  height: 34px;
   padding: 10px;
-  font-size: 25px;
+  font-size: 27px;
 }
 
 .label {
@@ -121,18 +124,18 @@ textarea {
   outline: none;
   background-color: #f5f5f5;
   border: 0;
-  border-radius: 8px;
+  border-radius: 7px;
   color: #333333;
   padding: 10px 12px;
   resize: none;
-  transition: 0.1s;
+  transition: 0.3s;
 }
 
 input, select {
   transition: 0.1s;
   background-color: #f5f5f5;
   border: 0;
-  border-radius: 100px;
+  border-radius: 15px;
   color: #333333;
   padding: 10px 12px;
   margin-top: 5px;
@@ -142,19 +145,20 @@ input, select {
 
 button {
   background-color: #f5f5f5;
-  border-radius: 20px;
+  border-radius: 15px;
   color: #333333;
   cursor: pointer;
-  padding: 10px 12px;
+  padding: 12px 10px;
   text-align: center;
-  margin-top:5px;
+  margin-top: 5px;
+  font-size: 14px;
   border: 2px solid grey;
-  transition: 0.1s;
+  transition: 0.5s;
 }
 
 .highlightedButton {
-  background-color: #2dc9ff;
-  border: 2px solid #1786ab !important;
+  background-color: var(--blue);
+  border: 2px solid var(--borderblue) !important;
   color: white;
 }
 
@@ -164,19 +168,19 @@ button {
 }
 
 textarea:hover, input:hover, select:hover, button:hover, .post-button:hover, #version:hover {
-  transition: 0.1s;
+  transition: 0.6s;
   opacity: 0.9;
 }
 
 .loader {
   display: inline-block;
-  border: 8px solid #f3f3f3;
+  border: 9.5px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 8px solid #62d7ff;
+  border-top: 9.5px solid var(--lightblue);
   width: 60px;
   height: 60px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
-  animation: spin 2s linear infinite;
+  -webkit-animation: spin 1s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
 }
 
 /* Safari */
@@ -205,6 +209,8 @@ textarea:hover, input:hover, select:hover, button:hover, .post-button:hover, #ve
 
 .post-button {
   align-items: center;
+  opacity: 0.8s;
+  transition: 0.5s;
   background-color: rgba(255, 255, 255, 0.8);
   color: black;
   border-radius: 100px;
@@ -221,11 +227,23 @@ textarea:hover, input:hover, select:hover, button:hover, .post-button:hover, #ve
   box-shadow: 1px 1px 100px #363636;
 }
 
+#actionmenu {
+	padding: 40px;
+	opacity: 0.5;
+	height: 80px;
+  position: fixed;
+  bottom: -140px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 2px 2px 4px 4px rgba(255, 255, 255, 0.1);
+  right: 20px;
+  cursor: initial !important;
+}
+
 #version {
   position: fixed;
   bottom: 30px;
   left: 30px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.8) 100%);
   padding: 10px;
   color: black;
   border-radius: 200px;
@@ -261,7 +279,7 @@ textarea:hover, input:hover, select:hover, button:hover, .post-button:hover, #ve
   left: 0;
   right: 0;
   padding: 15px;
-  background-color: #2dc9ff;
+  background-color: var(--blue);
   color: white;
   font-size: 20px;
   border-radius: 20px 20px 0 0;
@@ -276,22 +294,35 @@ textarea:hover, input:hover, select:hover, button:hover, .post-button:hover, #ve
 }
 
 .post {
-  background-color: var(--secondary);
+  background-color: var(--primary);
   overflow-x: hidden;
   color: white;
   border-radius: 10px;
   padding: 15px;
-  width: calc(30vh + 20%);
+  width: calc(20vh + 30%);
   display: inline-block;
   text-align: left;
-  border: 3px solid var(--border);
 }
 
 .attachement {
-  border-radius: 25px;
-  width: 525px;
+  border-radius: 19px;
+  width: 100%;
   margin-bottom: 7px;
-  box-shadow: 2px 2px 12px black;
+  box-shadow: 1px 1px 7px black;
+}
+
+.icon {
+  box-shadow: none;
+  width: 14px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.reply {
+  width: calc(20vh + 27%);
+  margin-left: 3%;
+  padding: 10px;
+  margin-top: 5px;
 }
 
 a {
@@ -338,15 +369,18 @@ li {
   margin-bottom: 5px;
   text-align: center;
   display: inline-block;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: var(--primary);
   padding: 20px 10px 20px 10px;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
+  min-width: 80px;
+  border: 2.5px solid white;
 }
 
 li:hover {
-  font-size: 20px;
+  background-color: var(--primarydarker);
+  box-shadow: 1px 1px 7px black;
 }
 
 .contentbox {
@@ -366,11 +400,18 @@ li:hover {
 }
 
 .messageitem {
+  background-color: var(--primary);
+  overflow-x: hidden;
+  color: white;
+  border-radius: 10px;
   padding: 20px;
-  background-color: #f7f7f7;
-  color: black;
-  border-radius: 20px;
-  margin-top: 10px;
-  width: 60vh;
+  font-size: 18px;
+  width: calc(20vh + 30%);
   display: inline-block;
+  border: 3.5px solid white;
+}
+
+.userbadgeprompt {
+  vertical-align: middle;
+  width: 16px;
 }

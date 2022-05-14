@@ -22,9 +22,9 @@
     }
 
     setTimeout(function(){
-      if (localStorage.getItem("lgbtq") == null) {
-        modal('lgbtq');
-        localStorage.setItem("lgbtq", true); // switch to BLM in 1.6
+      if (localStorage.getItem("blm") == null) {
+        modal('bblm');
+        localStorage.setItem("blm", true);
       }
     }, 2000)
   </script>
@@ -39,8 +39,6 @@
   <!-- Page content -->
   <div id="pageContent">
   </div>
-  <!-- Version -->
-  <span id="version"></span>
   <!-- Blank modal to be triggered -->
   <div id="myModal" class="modal">
     <div class="modal-content" id="myModalContent">
@@ -48,6 +46,19 @@
       <p id="modal-content">modal.content</p>
     </div>
   </div>
+  <!-- Action menu -->
+  <div id="actionmenu" onmouseover="up()" onmouseout="down()" class="post-button">
+  <!-- Messages button -->
+  <div class="post-button" style="bottom:270px" onclick="dispatchPageLoad('messages')" id="feedback"><img src="assets/mail.png" /></div>
+  <!-- Feedback button -->
+  <div class="post-button" style="bottom:190px" onclick="modal('feedback')" id="feedback"><img src="assets/post.png" /></div>
+  <!-- New community button -->
+  <div class="post-button" style="bottom:110px" onclick="modal('newcommunity')" id="newcom"><img src="assets/community.png" /></div>
+  </div>
+  <!-- Post button -->
+  <div onmouseover="up()" onmouseout="down()" class="post-button" onclick="post()">+</div>
+  <!-- Beta button -->
+  <div class="post-button" style="display:none;left: 30px;font-size: 23px;" id="beta-button" onclick="window.location.href = 'https://www.youtube.com/watch?v=-EQ6eHeBrhM'">🚧</div>
   <!-- Insert all page scripts -->
   <script src="scripts/community-functions.js"></script>
   <script src="scripts/profile-functions.js"></script>
@@ -60,10 +71,16 @@
   <script src="scripts/moment.js"></script>
   <script src="scripts/image.js"></script>
   <script src="scripts/main.js"></script>
+  <script src="scripts/actm.js"></script>
   <script src="scripts/mdls.js"></script>
   <script src="scripts/mod.js"></script>
   <script src="exploredata.js"></script>
-  <!-- Post button -->
-  <div class="post-button" onclick="post()">+</div>
+  <!-- Script to remove elements -->
+  <script>
+    if (!logged) {
+      document.getElementById("feedback").remove();
+      document.getElementById("newcom").remove();
+    }
+  </script>
 </body>
 </html>

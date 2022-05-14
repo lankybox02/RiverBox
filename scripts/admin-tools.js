@@ -1,7 +1,9 @@
 function loadAdminTools() {
   if (admin == 'true') { // if you set the admin variable to true you aint fooling anybody with that, just sayin
+    document.getElementById("beta-button").style.display = null;
+    document.getElementById("beta-button").setAttribute("onclick", "window.location.href = 'https://beta.riverbox.ml/'");
     localStorage.setItem("b", true);
-    document.getElementById("navbar").insertAdjacentHTML("afterEnd", `<div style="background-color: rgba(0, 0, 0, 0.4);display: inline-block;padding: 10px;border-bottom-right-radius: 20px;position: fixed;left: 0;z-index:2;"><details id="adminDropdown"><summary style="cursor:pointer">Admin Tools</summary><span class="header">Admin Tools</span><br><input placeholder="Modal name..." autocomplete="off" id="modalinput"><br><input placeholder="Page name..." autocomplete="off" id="pageinput"><br><input placeholder="Username..." autocomplete="off" id="userinput"><br><input placeholder="Community ID..." autocomplete="off" id="communityinput"><br><button onclick="pageDebugTools()">Page Debug Tools</button></details></div>`);
+    document.getElementById("navbar").insertAdjacentHTML("afterEnd", `<div style="background-color: rgba(0, 0, 0, 0.4);display: inline-block;padding: 15px;border-radius: 20px;position: fixed;left: 0;z-index:2;font-size:16px"><details id="adminDropdown"><summary style="cursor:pointer">Admin Tools</summary><span class="header">Admin Tools</span><br><input placeholder="Modal name..." autocomplete="off" id="modalinput"><br><input placeholder="Page name..." autocomplete="off" id="pageinput"><br><input placeholder="Username..." autocomplete="off" id="userinput"><br><input placeholder="Community ID..." autocomplete="off" id="communityinput"><br><button onclick="pageDebugTools()">Page Debug Tools</button></details></div>`);
     document.getElementById("modalinput").addEventListener("keypress", function(event) {
       if (event.key === "Enter") {
         event.preventDefault();

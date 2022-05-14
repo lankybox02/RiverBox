@@ -1,7 +1,7 @@
 let pageTypes = {
   "home": {
     "title": "Home",
-    "content": `<h1>Feed</h1><div id="postshomex_"></div><button id="buttonloadmore" onclick="initLoadPosts()" class="highlightedButton">Load more posts....</button><br><br><br><br>`,
+    "content": `<h1 style="margin-right: calc(20vh + 27%);">Feed</h1><div id="postshomex_"></div><button id="buttonloadmore" onclick="initLoadPosts()" class="highlightedButton">Load more posts....</button><br><br><br><br>`,
     "script": `initLoadPosts()`,
     "accountonly": false,
     "padding": true,
@@ -48,7 +48,10 @@ RiverBox is a social media platform for everyone that emphasizes kindness and su
 <br><br>
 We strive to create a safe and welcoming online community for everyone. We are a diverse and inclusive community that welcomes people of all ages, races, ethnicities, religions, abilities, sexual orientations, and gender identities.
 <br>
-Our platform enables users to share their interests, creations, and learn new things from others in a friendly and welcoming environment. We believe that everyone should feel free to express themselves online without fear of judgment or harassment.`,
+Our platform enables users to share their interests, creations, and learn new things from others in a friendly and welcoming environment. We believe that everyone should feel free to express themselves online without fear of judgment or harassment.
+<br><br>
+<span onclick="dispatchPageLoad('terms')" class="link">Terms</span> - 
+<span onclick="dispatchPageLoad('guidelines')" class="link">Guidelines</span>`,
     "script": ``,
     "accountonly": false,
     "padding": true,
@@ -91,7 +94,7 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
   },
   "explore": {
     "title": "Explore",
-    "content": `<h1>Explore</h1><span class="header">Search Tools</span><br><input placeholder="Insert a username..." id="usr"> <button class="highlightedButton" onclick="viewUserPage(document.getElementById('usr').value)">Load!</button><br><input placeholder="Insert a community ID..." id="com" value="1"> <button class="highlightedButton" onclick="viewCommunity(document.getElementById('com').value)">Load!</button><br><br><span class="header">Recommended</span><br><span>This section is still being worked on!</span>`,
+    "content": `<h1>Explore</h1><span class="header">Search Tools</span><br><input placeholder="Insert a username..." id="usr"> <button class="highlightedButton" onclick="viewUserPage(document.getElementById('usr').value)">Load!</button><br><input placeholder="Insert a community ID..." id="com" value="1"> <button class="highlightedButton" onclick="viewCommunity(document.getElementById('com').value)">Load!</button><br><br><span class="header">Recommended</span><br><div id="communities"></span>`,
     "script": `exploreLoad()`,
     "accountonly": false,
     "padding": true,
@@ -150,10 +153,10 @@ A username can only be between 3 to 20 characters long
   },
   "userpage": {
     "title": "Userpage",
-    "content": `<div style="text-align: left !important;padding: 0;"><img src="" style="object-fit: cover;width: 100%;height: 30vh;object-position: 50% 50%;opacity: 0.8" id="banner"><br>
+    "content": `<div style="text-align: left !important;padding: 0;"><img src="" style="object-fit: cover;width: 100%;height: 28vh;object-position: 50% 50%;opacity: 0.8" id="banner"><br>
 
 <div style="display:flex">
-<div class="contentbox" style="margin-left:20% !important;">
+<div class="contentbox" style="margin-left:15% !important;">
     <img src="" style="width:100px;height:100px;border-radius:150px;box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);vertical-align:middle" id="pfp">
     <span class="header" style="margin-left:10px;font-size: 40px;" id="usernameheader"></span> <img src="" id="role" class="profilebadge" onclick="modal('userbadges')" />
 <br>
@@ -162,22 +165,87 @@ A username can only be between 3 to 20 characters long
 </div>
 <div style="margin-left: 115px;">
   <button onclick="modal('sendmsg');">Send a message...</button> 
-  <button onclick="recommendUser1();" id="recommend">Recommend</button>
+  <!-- <button onclick="recommendUser1();" id="recommend">Recommend</button> -->
 </div>
 </div>
-<div class="contentbox" id="linkssection" style="display:none">
-    <b>Links</b>
-<ul style="padding:0">
-<li>YouTube</li>
-<li>Github</li>
-<li>WasteOf</li>
+<div class="contentbox" id="linkssection">
+    <b>Links</b> <span onclick="modal('editlinks')" style="cursor:pointer" class="pencil">(🖉)</span>
+<ul style="padding:0" id="ulforlinks">
 </ul>
+</div>
+<div class="contentbox" style="width:25vh">
+    <b>Information</b>
+<table style="width:100%;border-collapse:collapse;">
+  <tr>
+    <td>Location</td>
+    <td id="location"></td>
+    <td style="cursor:pointer" onclick="modal('location')" class="pencil">(🖉)</td>
+  </tr>
+  <tr>
+    <td>Role</td>
+    <td id="rolex"></td>
+    <td style="cursor:pointer" onclick="modal('getberified')" class="pencil">(🖉)</td>
+  </tr>
+  <tr>
+    <td>Age</td>
+    <td id="age"></td>
+    <td style="cursor:pointer" onclick="modal('age')" class="pencil">(🖉)</td>
+  </tr>
+  <tr>
+    <td>Gender</td>
+    <td id="gender"></td>
+    <td style="cursor:pointer" onclick="modal('gender')" class="pencil">(🖉)</td>
+  </tr>
+  <tr>
+    <td>Likes</td>
+    <td id="likes"></td>
+    <td style="cursor:pointer" onclick="modal('likes')" class="pencil">(🖉)</td>
+  </tr>
+  <tr>
+    <td>Dislikes</td>
+    <td id="dislikes"></td>
+    <td style="cursor:pointer" onclick="modal('dislikes')" class="pencil">(🖉)</td>
+  </tr>
+</table>
+</div>
+<div class="contentbox" style="width:35vh">
+<b>Pinned Post</b>
+<br><br>
+<div class="post" style="border: 2px solid white" id="pinnedpost"><span id="pinnedtext">This user has no pinned post.</span><br><br><div style="float: right;display:inline-block;color: var(--secondaryfont);" id="pinneddate"></div></div>
 </div>
 </div>
 
-<div style="display:flex;margin-top: 20px;margin-left: 20%;">
-<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>Biography</b><br><span id="bio"></span><br><br><b>Statistics</b><br>Joined <span id="timestamp"></span><div id="editProfileControls"></div><div id="adminProfileControls"></div></div>
-<div style="padding: 10px 10px 5px 5px;" id="posts"><span class="header" style="margin-bottom: 20px;"><span id="username"></span>'s Posts</span>
+<div style="display:flex;margin-top: 20px;margin-left: 15%;">
+<div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 100px;border-radius: 10px;align-self: flex-start;width:20%">
+
+<div style="background-image:url(https://u.cubeupload.com/lankysback/nPPT6U.png);padding:7px 12px;border-radius: 25px;cursor:pointer;" id="parentvapor" onclick="viewUserPage(lastfetcheduser)">
+<img src="https://cdn2.scratch.mit.edu/get_image/user/82383767_116x116.png" style="width:60px;border-radius:80px;vertical-align:middle;box-shadow: 0px 0px 12px 4px black;" id="imgvapor">
+<span style="font-size:30px;padding-left: 10px;text-shadow: 2px 2px 8px black;" id="vaporname">lanksy</span>
+</div>
+
+<br>
+<b>Biography</b>
+<br>
+<span id="bio"></span>
+<br><br>
+<b>Statistics</b>
+<br>
+<table style="width:80%;border-collapse:collapse;">
+  <tr>
+    <td>Joined</td>
+    <td><span id="timestamp"></span></td>
+  </tr>
+  <tr>
+    <td>Posts</td>
+    <td><span id="postcount">0</span></td>
+  </tr>
+  <tr>
+    <td>Views</td>
+    <td><span id="profileviews"></span></td>
+  </tr>
+</table>
+<div id="editProfileControls"></div><div id="adminProfileControls"></div></div>
+<div style="padding: 10px 10px 5px 5px;width:80%" id="posts"><span class="header" style="margin-bottom: 20px;"><span id="username"></span>'s Posts</span>
 <br>
 <div id="posts"></div>
 </div></div>`,
@@ -196,7 +264,7 @@ A username can only be between 3 to 20 characters long
 
 <div style="display:flex;margin-top: 40px;margin-left: 20%;">
 <div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 50px;border-radius: 10px;align-self: flex-start;width:20%"><b>About</b><br><span id="about"></span><br><button class="highlightedButton" id="joinbutton">Join</button><br><br><b>Statistics</b><br>Created <span id="timestamp"></span><br><br><b>Members</b><details><summary>Members List</summary><div id="memberslist"></div></details><div id="editCommunityControls"></div></div>
-<div style="padding: 10px 10px 5px 5px;"><span class="header">Latest Posts</span>
+<div style="padding: 10px 10px 5px 5px;width: 70vh;"><span class="header">Latest Posts</span>
 <br>
 <br>
 <div id="posts"></div>
@@ -237,7 +305,7 @@ let modalTypes = {
     <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
     <span class="header">What are you thinking about?</span>
     <span style="margin-top: 15px;display: block;">
-    <div style="width:30%;margin-bottom: 20px;"><button onclick="document.getElementById('postText').value =+ '[b][/b]'">b</button> <button onclick="document.getElementById('postText').value =+ '[i][/i]'">i</button> <button onclick="document.getElementById('postText').value =+ '[u][/u]'">u</button> <button onclick="document.getElementById('postText').value =+ '[s][/s]'">s</button> <button onclick="addImage(prompt('Image URL...'))">img</button></div>
+    <div style="width:30%;margin-bottom: 20px;"><button onclick="document.getElementById('postText').value = document.getElementById('postText').value + '[b][/b]'">b</button> <button onclick="document.getElementById('postText').value = document.getElementById('postText').value + '[i][/i]'">i</button> <button onclick="document.getElementById('postText').value = document.getElementById('postText').value + '[u][/u]'">u</button> <button onclick="document.getElementById('postText').value = document.getElementById('postText').value + '[s][/s]'">s</button> <button onclick="addImage(prompt('Image URL...'))">img</button></div>
     <textarea id="postText" style="width:30%" placeholder="Write a new post here..."></textarea>
     </span>
     <button class="highlightedButton" onclick="sendPost(document.getElementById('postText').value)">Post</button> 
@@ -569,10 +637,10 @@ let modalTypes = {
 </div>`
   },
   "banuser": {
-    "title": "Send a message!",
+    "title": "Ban this user?",
     "content": `<div style="display: flex;text-align:left;">
     <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
-    <span class="header">Would you like to send a message?</span>
+    <span class="header">Would you like to ban this user?</span>
     <span style="margin-top: 15px;display: block;">
     <textarea id="banreason" placeholder="Ban reasoning..."></textarea>
     </span>
@@ -589,14 +657,14 @@ let modalTypes = {
     <br><br>
     <b>User badges:</b>
     <ul>
-        <li><img src="badges/banned.png" style="vertical-align:middle;width:16px" /><br>Banned Account</li>
-        <li><img src="badges/user.png" style="vertical-align:middle;width:16px" /><br>Average Account</li>
-        <li><img src="badges/verified.png" style="vertical-align:middle;width:16px" /><br>Verified Account</li>
-        <li><img src="badges/beta-tester.png" style="vertical-align:middle;width:16px" /><br>Developement Team</li>
-        <li><img src="badges/administrator.png" style="vertical-align:middle;width:16px" /><br>Administrator</li>
-        <li><img src="badges/owner.png" style="vertical-align:middle;width:16px" /><br>Owner of RiverBox</li>
+        <li><img src="badges/banned.png" class="userbadgeprompt" /><br>Banned Account</li>
+        <li><img src="badges/user.png" class="userbadgeprompt" /><br>Average Account</li>
+        <li><img src="badges/verified.png" class="userbadgeprompt" /><br>Verified Account</li>
+        <li><img src="badges/beta-tester.png" class="userbadgeprompt" /><br>Developement Team</li>
+        <li><img src="badges/administrator.png" class="userbadgeprompt" /><br>Administrator</li>
+        <li><img src="badges/owner.png" class="userbadgeprompt" /><br>Owner of RiverBox</li>
     </ul>
-    <button class="highlightedButton" onclick="closeModal()">Alright!</button> <button onclick="modal('getberified')">Get verified</button>`
+    <button class="highlightedButton" onclick="closeModal()">Alright!</button>`
   },
   "getberified": {
     "title": "Do you want to get verified?",
@@ -608,6 +676,8 @@ So, you would like to get verified on RiverBox? Nice, let's guide you through th
 - You must have a unique username, profile picture, banner, and biography<br>
 - Your account must represent the real creator/brand you’re claiming to be<br>
 - You must be active and post frequently on RiverBox (at least every week)<br>
+- You must not have any more than 2 moderated posts on your profile<br>
+- You must fill out the information section on your profile entirely<br>
 - Your RiverBox account must be created at least 7 days ago
     </span>
 <br>
@@ -641,8 +711,158 @@ Would you like to join the LGBTQ+ community on RiverBox?
     <span style="margin-top: 15px;display: block;">
 Would you like to join the BLM community on RiverBox?
 <br><br>
-    <button class="highlightedButton" onclick="viewCommunity('1');closeModal()">Lemme take a look at it</button>
+    <button class="highlightedButton" onclick="viewCommunity('2');closeModal()">Lemme take a look at it</button>
     <button onclick="closeModal()">Nah thanks</button> 
 `
+  },
+  "feedback": {
+    "title": "Send us feedback!",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+    <span class="header">What do you think of RiverBox?</span>
+    <span style="margin-top: 15px;display: block;">
+    <textarea id="msg" placeholder="Feedback..."></textarea>
+    </span>
+    <button class="highlightedButton" onclick="sendMessageToUser('lanksy', '[Feedback Modal]space&&' + document.getElementById('msg').value);modal('', 'Sent! Thank you for your feedback - we will try our best to make your experience better on the site :)');">Send!</button> 
+    <button onclick="closeModal()">Nevermind</button>
+    </div>
+</div>`
+  },
+  "location": {
+    "title": "Edit information",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+    <span class="header">Edit your information...</span><br>
+    <span style="margin-top: 15px;display: block;">
+    <select id="newtext">
+      <option value="United States">United States</option>
+      <option value="United Kingdom">United Kingdom</option>
+      <option value="Canada">Canada</option>
+      <option value="Australia">Australia</option>
+      <option value="Russia">Russia</option>
+      <option value="India">India</option>
+      <option value="China">China</option>
+      <option value="South Korea">South Korea</option>
+      <option value="Switzerland">Switzerland</option>
+      <option value="Romania">Romania</option>
+      <option value="">Other</option>
+      <option value="">Prefer not to say</option>
+    </select>
+    </span>
+    <button class="highlightedButton" onclick="editType('location', document.getElementById('newtext').value);">Apply!</button> 
+    <button onclick="closeModal()">Nevermind</button>
+    </div>
+</div>`
+  },
+  "age": {
+    "title": "Edit information",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+    <span class="header">Edit your information...</span>
+<br>
+    <span style="margin-top: 15px;display: block;">
+<select id="newtext">
+    <option value="Under 13">Under 13</option>
+    <option value="13">13</option>
+    <option value="14-16">14-16</option>
+    <option value="17">17</option>
+    <option value="18">18</option>
+    <option value="18+">18+</option>
+    <option value="">Prefer not to say</option>
+</select>
+    </span>
+    <button class="highlightedButton" onclick="editType('age', document.getElementById('newtext').value);">Apply!</button> 
+    <button onclick="closeModal()">Nevermind</button>
+    </div>
+</div>`
+  },
+  "gender": {
+    "title": "Edit information",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+    <span class="header">Edit your information...</span><br>
+    <span style="margin-top: 15px;display: block;">
+<select id="newtext">
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Agender">Agender</option>
+    <option value="Bigender">Bigender</option>
+    <option value="Genderfluid">Genderfluid</option>
+    <option value="Non-binary">Non-binary</option>
+    <option value="">Other</option>
+    <option value="">Prefer not to say</option>
+</select>
+    </span>
+    <button class="highlightedButton" onclick="editType('gender', document.getElementById('newtext').value);">Apply!</button> 
+    <button onclick="closeModal()">Nevermind</button>
+    </div>
+</div>`
+  },
+  "likes": {
+    "title": "Edit information",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+    <span class="header">What do you like?</span><br>
+    <span style="margin-top: 15px;display: block;">
+    <input id="newtext" value="Kittens" maxlength="15" />
+    </span>
+    <button class="highlightedButton" onclick="editType('likes', document.getElementById('newtext').value);">Apply!</button> 
+    <button onclick="closeModal()">Nevermind</button>
+    </div>
+</div>`
+  },
+  "dislikes": {
+    "title": "Edit information",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+    <span class="header">What do you dislike?</span><br>
+    <span style="margin-top: 15px;display: block;">
+    <input id="newtext" value="Racism" maxlength="15" />
+    </span>
+    <button class="highlightedButton" onclick="editType('dislikes', document.getElementById('newtext').value);">Apply!</button> 
+    <button onclick="closeModal()">Nevermind</button>
+    </div>
+</div>`
+  },
+  "pin": {
+    "title": "Pin this post!",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+<span class="header">Would you like to pin this post?</span><br>
+    <span style="margin-top: 15px;display: block;">
+    Would you like to pin this post?
+    </span>
+    <button class="highlightedButton" onclick="editType('pinned', lastpin);">Yes, pin it!</button> 
+    <button onclick="closeModal()">No, thanks</button>
+    </div>
+</div>`
+  },
+  "editlinks": {
+    "title": "Edit your links!",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+<span class="header">Would you like to edit your links?</span><br>
+    <span style="margin-top: 15px;display: block;">
+    Please select an option.
+    </span>
+    <button class="highlightedButton" onclick="modal('newlinkprompt');"> Add a new link </button> 
+    <button class="highlightedButton" onclick="editType('links', '');"> Clear all links </button> 
+    <button onclick="closeModal()">I changed my mind</button>
+    </div>
+</div>`
+  },
+  "newlinkprompt": {
+    "title": "Add a new link!",
+    "content": `<div style="display: flex;text-align:left;">
+    <div style="margin-left: 20px;padding-top:20px;padding-bottom:20px;">
+    <span class="header">Add a new link!</span><br>
+    <span style="margin-top: 15px;display: block;">
+    <input id="newtext" placeholder="Link name..." maxlength="15" /><br>
+    <input id="newtext1" placeholder="Link URL..." maxlength="50" />
+    </span>
+    <button class="highlightedButton" onclick="addLink(document.getElementById('newtext').value, document.getElementById('newtext1').value);">Add!</button> 
+    <button onclick="closeModal()">I changed my mind</button>
+    </div>
+</div>`
   }
 }

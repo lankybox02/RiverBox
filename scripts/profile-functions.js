@@ -1,4 +1,7 @@
+let permsprofileposts = `style="display:none"`;
+let linkcount = 0;
 let cbmmode;
+let dataxx;
 
 function setProfileMedia(link, pfporbanner) {
   loadFull();
@@ -60,13 +63,14 @@ function follow() {
 }
 
 function viewUserPage(page) {
-  if(state.session == undefined) {
+  if(logged == false) {
     modal("", "You need to be logged in to access user pages!")
   }else{
+  
   if (page.charAt(0) == "@") {
     page = page.slice(1);
   }
-  if (page.charAt(page.length - 1).slice(-1) == " ") {
+  if (page.slice(-1) == " ") {
     page = page.slice(0, -1);
   }
 
@@ -76,6 +80,7 @@ postData(apiPath + 'getaccount', {"username": page})
     if (data.error != null) {
       modal("", "Error loading this userpage!")
     }else{
+      dataxx = data;
       accowner = page.toLowerCase() == localStorage.getItem("username").toLowerCase();
 dispatchPageLoad("userpage", true);
 if (data.cbm) {
@@ -95,35 +100,80 @@ document.getElementById("pfp").setAttribute("src", data.pfp);
 document.getElementById("usernameheader").innerText = data.username;
 document.getElementById("bio").innerText = data.bio;
 document.getElementById("role").setAttribute("src", data.role);
-document.getElementById("recommend").setAttribute("onclick", `recommendUser1('${page.toLowerCase()}');`);
+// document.getElementById("recommend").setAttribute("onclick", `recommendUser1('${page.toLowerCase()}');`);
 document.getElementById("username").innerText = data.username;
 document.getElementById("status").innerText = data.status;
+document.getElementById("profileviews").innerText = data.views;
 document.getElementById("statushex").style.backgroundColor = hexes[data.statushex].main;
 document.getElementById("statushex").style.border = hexes[data.statushex].border;
+
+// This is called a vapor profile btw
+// It's basically a compact version of your profile
+$("#parentvapor").css("background-image", `url(${data.banner})`);
+document.querySelector("#vaporname").innerText = data.username;
+document.querySelector("#imgvapor").setAttribute("src", data.pfp);
+
 if (data.timestamp != "Unknown") {
 document.getElementById("timestamp").innerText = moment(data.timestamp);
 }else{
 document.getElementById("timestamp").innerText = "???";
 }
-if (page == 'lanksy') {
-  $("#linkssection").html(`<b>Links</b>
-<ul style="padding:0">
-<li onclick="window.location.href = 'https://github.com/lankybox02/RiverBox'">Github</li> <li onclick="window.location.href = 'https://youtube.com/c/filterbud'">YouTube</li>  <li onclick="localStorage.clear();$('#pageContent').hide('fade');$('#navbar').hide('fade');$('.post-button').hide('fade');$('#version').hide('fade');modal('bannedbeta')">What's this button?</li>
-</ul>`);
-$("#linkssection").show("fade");
+if (data.pinned != "") {
+  fetch(apiPath + "getpost/" + data.pinned)
+    .then(response => response.json())
+    .then(data => pinload(data))
+}
+
+// oop
+// #ontheefficientwave
+document.getElementById("rolex").innerText = data.role.charAt(7).toUpperCase() + data.role.slice(8, -4);
+let stuffstats = ["location", "age", "gender", "likes", "dislikes"];
+for (let i = 0;i < stuffstats.length;i++) {
+  if (data[stuffstats[i]] != "") {
+    document.getElementById(stuffstats[i]).innerText = data[stuffstats[i]];
+  }else{
+    document.getElementById(stuffstats[i]).innerText = "???";
+  }
+}
+
+if (data.links == "") {
+  document.getElementById("ulforlinks").innerText = "This user has no links.";
+}else{
+let links = data.links.split("^");
+if (links[0] == "") {
+  links.shift();
+}
+let ex;
+for(let i = 0;i < links.length;i = i + 2) {
+  ex = links[i+1].replaceAll("'", "");
+  linkcount++;
+  document.getElementById("ulforlinks").insertAdjacentHTML("beforeEnd", `
+<li onclick="window.location.href = '${ex}'">${links[i].replaceAll("'", "")}</li>`);
+}
 }
 
 if (accowner) {
-  document.getElementById("editProfileControls").outerHTML = `<br><br><b>Manage profile</b><br><span class="link" onclick="modal('editbio')">Edit biography</span><br><span class="link" onclick="modal('editprofilepic')">Edit avatar</span><br><span class="link" onclick="modal('editbanner')">Edit banner</span><br><span class="link" onclick="selColModal()">Edit status</span><br><select id="cbmoptions" onchange="dispatchcbmoptions()"><option id="disabledcbm" value="disablecbm('` + data.banner + `');cbmmode = 'disabled'">Disable cinematic mode</option><option value="cinematicbannermode('` + data.banner + `', true);cbmmode = 'full'" id="enabledcbm1">Enable cinematic mode</option><option value="cinematicbannermode('` + data.banner + `', false);cbmmode = 'repeated'" id="enabledcbm2">Enable repeated cinematic mode</option></select><br><button class="highlightedButton" onclick="updatecbm()">Update CBM options</button><br>`;
+  permsprofileposts = ``;
+  document.getElementById("editProfileControls").outerHTML = `<br><b>Manage profile</b><br><span class="link" onclick="modal('editbio')">Edit biography</span><br><span class="link" onclick="modal('editprofilepic')">Edit avatar</span><br><span class="link" onclick="modal('editbanner')">Edit banner</span><br><span class="link" onclick="selColModal()">Edit status</span><br><select id="cbmoptions" onchange="dispatchcbmoptions()"><option id="disabledcbm" value="disablecbm('` + data.banner + `');cbmmode = 'disabled'">Disable cinematic mode</option><option value="cinematicbannermode('` + data.banner + `', true);cbmmode = 'full'" id="enabledcbm1">Enable cinematic mode</option><option value="cinematicbannermode('` + data.banner + `', false);cbmmode = 'repeated'" id="enabledcbm2">Enable repeated cinematic mode</option></select><br><button class="highlightedButton" onclick="updatecbm()">Update CBM options</button><br>`;
   if (data.cbmfit) {
     document.getElementById("enabledcbm1").setAttribute("selected", "");
   }else{
     document.getElementById("enabledcbm2").setAttribute("selected", "");
   }
+}else{
+  let pencil = document.getElementsByClassName("pencil");
+  for (let i = 0;i < pencil.length;i++) {
+      pencil[i].style.display = "none";
+  }
 }
 
 if (state.session.admin == 'true') {
-  document.getElementById("adminProfileControls").outerHTML = `<br><b>Administration</b><br><button onclick="modal('banuser')">Ban Fetched User</button><br><button onclick="viewUserPage(lastfetcheduser)">Refresh Fetched User</button><br><button onclick="modal('verifyuser')">Verify Fetched User</button>`;
+  document.getElementById("adminProfileControls").outerHTML = `<br><b>Administration</b><br>Administrator: <span id="adminornot">Not loaded</span><br><button onclick="modal('banuser')">Ban</button> <button onclick="modal('verifyuser')">Verify</button> <button onclick="viewUserPage(lastfetcheduser)">Refresh</button> <button onclick="visualJSONStandalone(dataxx)">Raw JSON</button><br><br><div id="ul"></div>`;
+  if (data.admin == 'true') {
+    document.getElementById("adminornot").innerHTML = "true";
+  }else{
+    document.getElementById("adminornot").innerHTML = "false";
+  }
 }
 
 if (data.posts == "&") {
@@ -163,7 +213,8 @@ if (data.author.toLowerCase() == lastfetcheduser.toLowerCase()) {
 if (data.content == "<span class='moderated-post-text'>(This post was moderated)</span>") {
 document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><br><div class="post">` + data.content + `</div>`)
 }else{
-document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><div class="post">` + atob(data.content) + `<br><img src="` + data.attchmnt + `" width="450px" /><br><span onclick="${tooManyRepliesModal}${userpostid})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="reportModal(${userpostid})" class="socialButton" ` + loggedSocial() + `>Report</span><div style="float: right;display:inline-block;color: var(--secondaryfont);">` + moment(data.timestamp) + `</div></div><br>${b}`)
+document.getElementById("posts").insertAdjacentHTML("beforeEnd", `<br><div class="post">` + convertPost(data.content) + `<br><img src="` + data.attchmnt + `" width="450px" /><br><span onclick="${tooManyRepliesModal}${userpostid})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="reportModal(${userpostid})" class="socialButton" ` + loggedSocial() + `>Report</span> <span onclick="modal('pin');lastpin = ${userpostid};" class="socialButton" ${permsprofileposts}>Pin</span><div style="float: right;display:inline-block;color: var(--secondaryfont);">` + moment(data.timestamp) + `</div></div><br>${b}`);
+document.getElementById("postcount").innerText = (parseInt(document.getElementById("postcount").innerText) + 1).toString();
 }
 }
 }
@@ -181,9 +232,9 @@ document.getElementById("navbar").style.backgroundColor = "transparent";
 }
 
 function disablecbm(bannersrc) {
-document.body.style.backgroundImage = null;
+document.body.style.backgroundImage = "url(https://u.cubeupload.com/lankysback/AO6OiZ.png)";
 document.body.style.backgroundSize = null;
-document.getElementById("navbar").style.backgroundColor = "var(--primary)";
+document.getElementById("navbar").style.backgroundColor = null;
 if (bannersrc != null) {
   document.getElementById("banner").outerHTML = `<img src="` + bannersrc.replaceAll("<", "&lt;").replaceAll(">", "&gt;") + `" style="object-fit: cover;width: 100%;height: 30vh;object-position: 50% 50%;opacity: 0.8" id="banner">`;
 }
@@ -257,4 +308,45 @@ function verifyUser() {
   .then(data => {
       window.location.reload();
   });
+}
+
+function pinload(data) {
+  document.getElementById("pinnedtext").innerHTML = convertPost(data.content);
+  document.getElementById("pinneddate").innerText = moment(data.timestamp);
+}
+
+function editType(type, newx) {
+  modal('', 'Changes applied - your profile should update in 5-10 seconds.');
+  postData(apiPath + 'edite', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "edittype": "` + type + `", "new": "` + newx + `"}`))
+  .then(data => {
+      viewUserPage(lastfetcheduser);
+  });
+}
+
+function addLink(name, link) {
+  if (!link.startsWith("https://")) {
+    modal('', 'Ay, just something to think about. Did you know that ' + link + ' is not an actual URL?<br><br>That\'s right. It\'s missing the https:// at the start 😝');
+  }else{
+  if (name == "" && link == "") {
+    modal('', 'Not sure how you\'re gonna add a link when you don\' provide any info...');
+  }else{
+  if (name == "") {
+    modal('', 'Pretty sure you need to add the name of a link?');
+  }else{
+  if (link == "") {
+    modal('', 'I think you need to add a link too...just my opinion though, could be wrong tough...');
+  }else{
+  if (linkcount > 2) {
+    modal('', 'Hey kiddo, you have reached the limit of 3 links. Clear them links or just stop adding them 🥱');
+  }else{
+  modal('', 'The link was added - your profile should update in 5-10 seconds.');
+  postData(apiPath + 'addlink', JSON.parse(`{"username": "` + localStorage.getItem("username") + `", "session": "` + localStorage.getItem("session") + `", "name": "` + name + `", "link": "` + link + `"}`))
+  .then(data => {
+      viewUserPage(lastfetcheduser);
+  });
+  }
+  }
+  }
+  }
+  }
 }

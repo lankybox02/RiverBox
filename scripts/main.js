@@ -14,6 +14,7 @@ let betaOrigin;
 let loggedOut;
 let accowner;
 let version;
+let lastpin;
 let logged;
 let admin;
 let state;
@@ -35,7 +36,7 @@ let awardsList = {
 attachements = [];
 state = {"origin": true, "session": {"username": ""}};
 
-betaOrigin = location.hostname.endsWith('test.ml');
+betaOrigin = location.hostname.endsWith('dev.riverbox.ml');
 logged = localStorage.getItem("username") != null && localStorage.getItem("session") != null;
 
 if (betaOrigin) {
@@ -43,8 +44,6 @@ if (betaOrigin) {
 }else{
   version = "Public";
 }
-
-document.getElementById("version").innerText = version + " " + ver__;
 
 function updateState() {
   fetch(apiPath)
@@ -155,21 +154,8 @@ function dispatchPageLoad(pageType, doNotSetTitle) {
       $('#pageContent').show("fade");
       document.getElementById("pageContent").innerHTML = pageTypes[pageType].content;
       eval(pageTypes[pageType].script);
-    clearTimeout(loadTimeout)
   }
     }
-  loadTimeout = setTimeout(function(){
-    if (document.getElementById("pageContent").innerHTML.includes("Give us a moment...</span>")) {
-      if (lastPageVisited == "home") {
-        setTimeout(function(){
-          dispatchPageLoad("apifail");
-        }, 100)
-      }else{
-      dispatchDocumentTitle("Whoops!");
-      document.getElementById("pageContent").innerHTML = `<br><br><span class="header">Are you sure you're in the right place?</span><br><span>The page you have tried to load didn't return any response - it's either broken or does not exist.<br>If you're most certain this page should be loading correctly, please click the button below.<br>If it still doesn't load, please create an issue on our <a href="https://github.com/lankybox02/RiverBox/issues/16">github page</a>.</span><br><button onclick="dispatchPageLoad('${pageType}')">Re-try</button>`;
-      }
-    }
-  }, 6000);
 }
 
 function dispatchDocumentTitle(title, disbaleRiverBoxBranding) {
@@ -199,7 +185,7 @@ b = "";
 if (!disableReplies) {
 if (x[data].replies[0] != null) {
   for (let i = 0;i < Object.keys(x[data].replies).length;i++)
-    b = b + `<div class="post" style="width: calc(30vh + 18%);margin-left: 2%;padding: 10px;margin-top: 5px;"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].replies[i].author + `')">` + x[data].replies[i].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].replies[i].reply) + `</span>
+    b = b + `<div class="post reply"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].replies[i].author + `')">` + x[data].replies[i].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].replies[i].reply) + `</span>
 <div style="float: right;color: var(--secondaryfont);">` + moment(x[data].replies[i].timestamp) + `</div>
 </div><br>`
 }
@@ -231,7 +217,7 @@ addPost = true;
 
 if (addPost) {
 x0 = typesOfPosts[Math.floor(Math.random() * typesOfPosts.length)];
-document.getElementById("postshomex_").insertAdjacentHTML(x0, `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="pfps/question mark.png" style="width: 30px;height:30px;border-radius:30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" class="attachement" onerror="this.remove()" /><br><span onclick="${tooManyRepliesModal}${i})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="recommendUser1(${x[data].author.toLowerCase()})" class="socialButton" ` + loggedSocial() + `>Recommend</span> <span onclick="reportModal(${i})" class="socialButton" ` + loggedSocial() + `>Report</span>
+document.getElementById("postshomex_").insertAdjacentHTML(x0, `<div class="post"><span style="color: var(--secondaryfont);cursor:pointer" onclick="viewUserPage('` + x[data].author + `')"> <img id="img${i}" src="pfps/question mark.png" style="width: 30px;height:30px;border-radius:30px;vertical-align: middle;" /> ` + x[data].author + `</span><span style="margin-top:7px;margin-bottom:7px;display:block;color:var(--postfont)">` + convertPost(x[data].content) + `</span><img src="` + x[data].attchmnt + `" class="attachement" onerror="this.remove()" /><br><span onclick="${tooManyRepliesModal}${i})" class="socialButton" ` + loggedSocial() + `>Reply</span> <span onclick="reportModal(${i})" class="socialButton" ` + loggedSocial() + `>Report</span>
 <div ` + adminClassLoad() + `><span class="socialButton" onclick="modPost(${i})">(Moderate)</span> <span class="socialButton">(ID: ${i})</span></div>
 <div style="float: right;color: var(--secondaryfont);">` + moment(x[data].timestamp) + `</div></div><br>` + b + `<br>`);
 postData(apiPath + 'postpfp', JSON.parse(`{"postid": "${i}"}`))
@@ -246,7 +232,7 @@ function convertPost(postContent) {
   if (postContent == "<span class='moderated-post-text'>(This post was moderated)</span>") {
     return postContent;
   }else{
-    return atob(postContent).replaceAll("[b]", `<b>`).replaceAll("[/b]", `</b>`).replaceAll("[i]", `<i>`).replaceAll("[/i]", `</i>`).replaceAll("[u]", `<u>`).replaceAll("[/u]", `</u>`).replaceAll("[s]", `<s>`).replaceAll("[/s]", `</s>`);
+    return atob(postContent).replaceAll("[b]", `<b>`).replaceAll("[/b]", `</b>`).replaceAll("[i]", `<i>`).replaceAll("[/i]", `</i>`).replaceAll("[u]", `<u>`).replaceAll("[/u]", `</u>`).replaceAll("[s]", `<s>`).replaceAll("[/s]", `</s>`).replaceAll("&&br&&", "<br>");
   }
 }
 
@@ -331,6 +317,7 @@ function post() {
 }
 
 function sendPost(postContent) {
+  postContent = postContent.replace(/[\r\n]+/g,"&&br&&");
   if (postContent != '') {
     console.log(postContent.replaceAll(/(?:\r\n|\r|\n)/gi, "\n"));
     loadFull();
@@ -401,7 +388,7 @@ function loadMessages() {
   .then(data => {
     document.getElementById("pageContent").innerHTML = "<h1>Messages</h1><div id='msgs'></div>";
     for (let i = 0;i < Object.keys(data).length;i++) {
-      document.getElementById("msgs").insertAdjacentHTML("afterBegin", `<div class="messageitem">` + data[i].content.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("space&&", "<br>") + ` - <span style="color: #919191;">` + moment(data[i].timestamp) + `</span></div><br>`);
+      document.getElementById("msgs").insertAdjacentHTML("afterBegin", `<div class="messageitem">` + data[i].content.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("space&&", "<br>") + `<br><br><span style="color: #919191;">` + moment(data[i].timestamp) + `</span></div><br>`);
     }
   });
 }
@@ -455,4 +442,17 @@ report("-!", localStorage.getItem("username") + `/${awardtype}<<<<` + JSON.strin
 function recommendUser1(user) {
   localStorage.setItem('recommendthisuser', user);
   modal('', "Thanks for your feedback, this user's posts will now be more commonly recommended to you.");
+}
+
+function visualJSON(x) {
+modal("", "<ul id='ul'></ul>", "", "JSON Keys");
+for(let i = 0;i < Object.keys(x).length;i++) {
+    document.getElementById("ul").insertAdjacentHTML("beforeEnd", `<li><span style="font-size:20px">${Object.keys(x)[i]}</span><br>"${x[Object.keys(x)[i]]}"</li> `);
+}
+}
+
+function visualJSONStandalone(x) {
+for(let i = 0;i < Object.keys(x).length;i++) {
+    document.getElementById("ul").insertAdjacentHTML("afterBegin", `<details><summary>${Object.keys(x)[i]}</summary>${x[Object.keys(x)[i]]}</details>`);
+}
 }

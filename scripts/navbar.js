@@ -37,8 +37,6 @@ RiverBox
 </div>
 <span onclick="dispatchPageLoad('explore')">Explore</span>
 <span onclick="dispatchPageLoad('about')">About</span>
-<span onclick="dispatchPageLoad('terms')">Terms</span>
-<span onclick="dispatchPageLoad('guidelines')">Guidelines</span>
 ${adminPageLink}
 ${accountControls}
 `;
