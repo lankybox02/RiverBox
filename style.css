@@ -415,3 +415,38 @@ li:hover {
   vertical-align: middle;
   width: 16px;
 }
+
+#parentvapor {
+  background-image: url(https://u.cubeupload.com/lankysback/nPPT6U.png);
+  padding: 3px 6px;
+  border-radius: 100px;
+  display: table-cell;
+  width: 1%;
+  height: 70px;
+  position: relative;
+  vertical-align: middle;
+}
+
+#imgvapor {
+  width: 60px;
+  border-radius: 100px;
+  vertical-align: middle;
+  box-shadow: 0px 0px 12px 4px black;
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  bottom: 8px;
+}
+
+#vaporname {
+  font-size: 35px;
+  padding-left: 80px;
+  text-shadow: 2px 2px 8px black;
+}
+
+.community-member {
+  width: 32px;
+  border-radius: 32px;
+  vertical-align: middle;
+  padding-top: 5px;
+}

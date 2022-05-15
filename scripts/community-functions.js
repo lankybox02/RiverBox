@@ -16,6 +16,9 @@ postData(apiPath + 'communitynewbanner',  JSON.parse(`{"id": "${id}", "username"
 
 function viewCommunity(page) {
   if (!state.flags.communities) return;
+  if (state.username == null) {
+    modal('', 'You need to be logged in to access community pages!');
+  }else{
   postData(apiPath + 'getcommunity', JSON.parse(`{"communityid": "${page}"}`))
   .then(data => {
     if (data.error != null) {
@@ -46,8 +49,12 @@ for (let i = members.length - 1;i > -1;i--) {
     document.getElementById("joinbutton").remove();
   }
     postData(apiPath + 'getaccount', JSON.parse(`{"username": "` + members[i].toLowerCase() + `"}`))
-  .then(data => {
-      document.getElementById("memberslist").insertAdjacentHTML("afterBegin", `<img src="${data.pfp}" style="width:32px;border-radius:32px;vertical-align:middle" /> ${data.username}<br>`)
+  .then(datax => {
+    ownermsg = "";
+    if (members[i].toLowerCase() == data.creator.toLowerCase()) {
+      ownermsg = " [COMMUNITY OWNER]";
+    }
+      document.getElementById("memberslist").insertAdjacentHTML(typeofAdd, `<span onclick="viewUserPage('${datax.username}')"><img src="${datax.pfp}" class="community-member" /> ${datax.username} ${ownermsg}</span><br>`);
   });
 }
 }
@@ -103,6 +110,7 @@ postData(apiPath + 'postpfp', JSON.parse(`{"postid": "${i}"}`))
 }
 }
 })
+}
 };
 
 function createCommunity(name) {

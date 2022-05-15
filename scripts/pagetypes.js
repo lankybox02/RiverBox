@@ -94,8 +94,24 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
   },
   "explore": {
     "title": "Explore",
-    "content": `<h1>Explore</h1><span class="header">Search Tools</span><br><input placeholder="Insert a username..." id="usr"> <button class="highlightedButton" onclick="viewUserPage(document.getElementById('usr').value)">Load!</button><br><input placeholder="Insert a community ID..." id="com" value="1"> <button class="highlightedButton" onclick="viewCommunity(document.getElementById('com').value)">Load!</button><br><br><span class="header">Recommended</span><br><div id="communities"></span>`,
-    "script": `exploreLoad()`,
+    "content": `<h1>Explore</h1><span class="header">Search Tools</span><br><input placeholder="Insert a username..." id="usr"> <button class="highlightedButton" onclick="viewUserPage(document.getElementById('usr').value)" id="usrclick">Load!</button><br><input placeholder="Insert a community ID..." id="com" value="1"> <button class="highlightedButton" onclick="viewCommunity(document.getElementById('com').value)" id="comclick">Load!</button><br><br><span class="header">Recommended</span><br><div id="communities"></span>`,
+    "script": `
+exploreLoad();
+var input1 = document.getElementById("usr");
+input1.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("usrclick").click();
+  }
+});
+var input2 = document.getElementById("com");
+input2.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("comclick").click();
+  }
+});
+`,
     "accountonly": false,
     "padding": true,
     "banner": ""
@@ -133,9 +149,8 @@ If you're ever feeling left out, come hang out on RiverBox and have some fun wit
 <br><br>
     A username can only contain letters (a-z, A-Z), dash (-) and underscore (_)
 <br>
-A username can only be between 3 to 20 characters long
+A username can only be between 3 to 10 characters long
 <br>A username may not contain anything offensive or inappropriate
-<span><b>Warning:</b> The sign-up API is still in its early stages and may give out some random errors sometimes. If you encounter one, please alert us on our <a href="https://github.com/lankybox02/RiverBox">github page</a>!</span>
     </div>
 </div>`,
     "script": `if(logged){dispatchLoadingScreen()}`,
@@ -218,9 +233,9 @@ A username can only be between 3 to 20 characters long
 <div style="display:flex;margin-top: 20px;margin-left: 15%;">
 <div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 100px;border-radius: 10px;align-self: flex-start;width:20%">
 
-<div style="background-image:url(https://u.cubeupload.com/lankysback/nPPT6U.png);padding:7px 12px;border-radius: 25px;cursor:pointer;" id="parentvapor" onclick="viewUserPage(lastfetcheduser)">
-<img src="https://cdn2.scratch.mit.edu/get_image/user/82383767_116x116.png" style="width:60px;border-radius:80px;vertical-align:middle;box-shadow: 0px 0px 12px 4px black;" id="imgvapor">
-<span style="font-size:30px;padding-left: 10px;text-shadow: 2px 2px 8px black;" id="vaporname">lanksy</span>
+<div id="parentvapor">
+<img src="https://cdn2.scratch.mit.edu/get_image/user/82383767_116x116.png" id="imgvapor">
+<span id="vaporname">lanksy</span>
 </div>
 
 <br>
