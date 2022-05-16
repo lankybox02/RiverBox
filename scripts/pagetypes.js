@@ -226,7 +226,7 @@ A username can only be between 3 to 10 characters long
 <div class="contentbox" style="width:35vh">
 <b>Pinned Post</b>
 <br><br>
-<div class="post" style="border: 2px solid white" id="pinnedpost"><span id="pinnedtext">This user has no pinned post.</span><br><br><div style="float: right;display:inline-block;color: var(--secondaryfont);" id="pinneddate"></div></div>
+<div class="post" style="border: 2px solid white" id="pinnedpost"><span id="pinnedtext">This user has no pinned post.</span><br><br><div id="pinneddate"></div></div>
 </div>
 </div>
 
@@ -234,7 +234,7 @@ A username can only be between 3 to 10 characters long
 <div style="padding: 20px 15px 20px 15px;background-color: var(--primary);margin-right: 100px;border-radius: 10px;align-self: flex-start;width:20%">
 
 <div id="parentvapor">
-<img src="https://cdn2.scratch.mit.edu/get_image/user/82383767_116x116.png" id="imgvapor">
+<img id="imgvapor">
 <span id="vaporname">lanksy</span>
 </div>
 
@@ -466,7 +466,7 @@ let modalTypes = {
     <div style="margin-left: 20px;padding-top:20px;">
     <span class="header">There's too many replies here!</span>
     <span style="margin-top: 15px;display: block;">
-    This post has reached the reply limit of 6 replies.
+    This post has reached the reply limit of 10 replies.
     </span>
     <button onclick="closeModal()" class="highlightedButton">Dismiss</button>
     </div>

@@ -1,4 +1,4 @@
-let apiPath = "https://api.riverbox.ml/";
+let apiPath = "https://riverbox-api.lankybox02.repl.co/";
 let lastSelectedPostReportID;
 let lastbanneduserattempt;
 let lastcommunityfetched;
@@ -12,6 +12,7 @@ let loadTimeout;
 let replyPostId;
 let betaOrigin;
 let loggedOut;
+let redirect;
 let accowner;
 let version;
 let lastpin;
@@ -20,8 +21,11 @@ let admin;
 let state;
 let x0;
 
+state = {"origin": true, "session": {"username": ""}};
 let typesOfPosts = ["afterBegin", "beforeEnd"];
 let following = ["lanksy", "eee"];
+attachements = [];
+redirect = false;
 
 let awardsList = {
     "1": "awards/bronzemedal.png",
@@ -32,9 +36,6 @@ let awardsList = {
     "6": "awards/goldtrophy.png",
     "7": "awards/diamondaward.png",
 }
-
-attachements = [];
-state = {"origin": true, "session": {"username": ""}};
 
 betaOrigin = location.hostname.endsWith('dev.riverbox.ml');
 logged = localStorage.getItem("username") != null && localStorage.getItem("session") != null;
@@ -75,6 +76,23 @@ insertNav("$");
 dispatchPageLoad("home");
 }
 
+var pattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+var current = 0;
+var keyHandler = function (event) {
+
+	if (pattern.indexOf(event.key) < 0 || event.key !== pattern[current]) {
+		current = 0;
+		return;
+	}
+
+	current++;
+	if (pattern.length === current) {
+        window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+	}
+
+};
+document.addEventListener('keydown', keyHandler, false);
+
 function newmsgcheck(data, alert) {
 if (data.newmessages) {
   if (alert) {
@@ -103,6 +121,11 @@ function computeLoginData(data) {
       newmsgcheck(data, true);
       admin = data.admin;
       insertNav(data.username);
+    }
+    if (redirect) {
+      if (state.session.username.toLowerCase() == "zu-" || state.session.username.toLowerCase() == "radi8" || state.session.username.toLowerCase() == "lanksy") {
+        window.location.href = "https://admintalk.riverbox.ml/";
+      }
     }
     }else{
       insertNav("$")
@@ -191,7 +214,7 @@ if (x[data].replies[0] != null) {
 }
 
 tooManyRepliesModal = "replyModal(";
-if (Object.keys(x[data].replies).length > 5) {
+if (Object.keys(x[data].replies).length > 9) {
   tooManyRepliesModal = "modal('repliesoverloadalert', ";
 }
 }else{

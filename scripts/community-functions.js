@@ -16,7 +16,7 @@ postData(apiPath + 'communitynewbanner',  JSON.parse(`{"id": "${id}", "username"
 
 function viewCommunity(page) {
   if (!state.flags.communities) return;
-  if (state.username == null) {
+  if (!logged) {
     modal('', 'You need to be logged in to access community pages!');
   }else{
   postData(apiPath + 'getcommunity', JSON.parse(`{"communityid": "${page}"}`))

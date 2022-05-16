@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Radio+Canada&display=swap');
+
 ::-webkit-scrollbar {
     display: none;
 }
@@ -21,13 +23,14 @@ body, html {
 }
 
 body {
-  font-family: Helvetica, sans-serif;
+  font-family: 'Radio Canada', sans-serif;
   background-color: var(--background);
   color: var(--font);
   margin: 0;
   margin-top: 50px;
   background-attachment: fixed;
   background-image: url(https://u.cubeupload.com/lankysback/AO6OiZ.png);
+  letter-spacing: 1.35px;
 }
 
 #navbar {
@@ -41,6 +44,7 @@ body {
   height: 34px;
   padding: 10px;
   font-size: 27px;
+  letter-spacing: 1.7px;
 }
 
 .label {
@@ -287,10 +291,15 @@ textarea:hover, input:hover, select:hover, button:hover, .post-button:hover, #ve
 
 .socialButton {
   text-decoration: underline;
-  color: grey;
-  font-style: italic;
+  letter-spacing: 1px;
+  color: lightgrey;
   font-size: 12px;
   cursor: pointer;
+  transition: 0.5s;
+}
+
+.socialButton:hover {
+  color: white;
 }
 
 .post {
@@ -417,7 +426,7 @@ li:hover {
 }
 
 #parentvapor {
-  background-image: url(https://u.cubeupload.com/lankysback/nPPT6U.png);
+  background-position: center;
   padding: 3px 6px;
   border-radius: 100px;
   display: table-cell;
@@ -449,4 +458,10 @@ li:hover {
   border-radius: 32px;
   vertical-align: middle;
   padding-top: 5px;
+}
+
+#pinneddate {
+  float: right;
+  display: inline-block;
+  color: var(--secondaryfont);
 }

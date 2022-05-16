@@ -311,8 +311,12 @@ function verifyUser() {
 }
 
 function pinload(data) {
-  document.getElementById("pinnedtext").innerHTML = convertPost(data.content);
-  document.getElementById("pinneddate").innerText = moment(data.timestamp);
+  if (convertPost(data.content).length > 80) {
+    modal("", "Oof, that post seems a bit too long to fit on your profile!");
+  }else{
+    document.getElementById("pinnedtext").innerHTML = convertPost(data.content);
+    document.getElementById("pinneddate").innerText = moment(data.timestamp);
+  }
 }
 
 function editType(type, newx) {
@@ -324,6 +328,7 @@ function editType(type, newx) {
 }
 
 function addLink(name, link) {
+  if (name.includes("^") || link.includes("^"))
   if (!link.startsWith("https://")) {
     modal('', 'Ay, just something to think about. Did you know that ' + link + ' is not an actual URL?<br><br>That\'s right. It\'s missing the https:// at the start 😝');
   }else{
