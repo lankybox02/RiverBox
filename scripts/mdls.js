@@ -13,6 +13,7 @@ function modal(modalType, customMessage, customFunction, customTitle, dismissbut
     $("#modal-header").text(modalTypes[modalType].title);
     $("#modal-content").html(modalTypes[modalType].content);
   }
+  $("#myModal").click(closeModal)
   $("#myModalContent").show("fade");
   document.getElementById("myModal").style.display = "block";
 }
