@@ -235,7 +235,7 @@ A username can only be between 3 to 10 characters long
 
 <div id="parentvapor">
 <img id="imgvapor">
-<span id="vaporname">lanksy</span>
+<span id="vaporname"></span>
 </div>
 
 <br>
